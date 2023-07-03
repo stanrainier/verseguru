@@ -1,0 +1,81 @@
+main{
+
+    background-image: url('img/background/VerseGuruBG.jpg'); 
+    background-size: cover; height: 100%;
+}
+.main__wrapper{
+    display: flex;
+    align-items: center;
+    height: 80%;
+}
+.welcomeText{
+font-size: 90px;
+color: white;
+font-family: 'Playfair Display', serif;
+text-align: center;
+}
+
+.login__module h1{
+    font-family: 'Playfair Display', serif;
+    color: #343F56;
+    text-align: left;
+}
+.login__form input{
+    background-color: #f5e6ca;
+    color: #343f56;
+}
+.loginBtn{
+    background-color: #343F56;
+    border: none;
+    color: white;
+    padding: 12px 50px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+/* Home */
+
+.welcomeText{
+    font-size: 90px;
+    color: white;
+    font-family: 'Playfair Display', serif;
+    text-align: center;
+    }
+    .home__header{
+        text-align: center;
+        justify-content: center;
+        margin-top: 10%;
+    }
+    .homemain__wrapper{
+        display: flex;
+        flex-direction: column;
+    }
+    .search__module{
+        justify-content: center;
+        margin-top: 10%;
+    
+    }
+    .smart-search{
+        background-color: #f5e6ca !important;
+    }
+    
+    .button-smartsearch{
+        background-color: #343F56;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        border-radius: 5px;
+        transition-duration: 0.4s;
+    }
+    .button-smartsearch:hover{
+        background-color: white;
+        color: #343F56;
+        border: solid 1px;
+    }
