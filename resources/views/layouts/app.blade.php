@@ -36,6 +36,9 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="/css/app.css">
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
+    <!-- Axios  -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
   </head>
 
 <body>
@@ -74,10 +77,10 @@
                             @endif
                         @else
                             <div class="navbar__item m-3">
-                                <a href="#" class="formatlink"><span> HOME </span></a>
+                                <a href="/home" class="formatlink"><span> HOME </span></a>
                             </div>
                             <div class="navbar__item m-3">
-                            <a href="#" class="formatlink"><span> BIBLE </span></a>
+                            <a href="/bible" class="formatlink"><span> BIBLE </span></a>
                             </div>
                             <div class="navbar__item m-3">
                                 <a href="#" class="formatlink"><span> BOOKMARKS </span></a>

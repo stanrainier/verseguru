@@ -29,4 +29,8 @@ class HomeController extends Controller
     {
         return view('/modules/aboutus');
     }
+    public function bible()
+    {
+        return view('/modules/bible');
+    }
 }

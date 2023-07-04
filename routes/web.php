@@ -33,7 +33,12 @@ Route::get('/logout', function () {
     return route('logout');
 });
 
+Route::get('/bibleTest', function () {
+    return route('/modules/bible');
+});
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/aboutus', [App\Http\Controllers\HomeController::class, 'aboutus'])->name('aboutus');
+Route::get('/bible', [App\Http\Controllers\HomeController::class, 'bible'])->name('bible');
