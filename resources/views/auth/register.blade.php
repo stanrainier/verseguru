@@ -11,7 +11,7 @@
             </div>
             <div class="col">
                 <div class="signup__module row">
-                    <div class="card w-75 p-5 shadow-sm ">
+                    <div class="card w-100 p-5 shadow-sm ">
                         <div class="row ">
                             <div class="card-body createAccount__container">
                             <form method="POST" action="{{ route('register') }}">
@@ -32,7 +32,12 @@
                                     <div class="d-flex row">
                                         <div class="col p-1">
                                             <div class="input-group mb-3">
-                                                <input type="text" class="form-control password" placeholder="Username">
+                                                <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required placeholder="Username">
+                                                    @error('username')
+                                                        <span class="invalid-feedback" role="alert">
+                                                            <strong>{{ $message }}</strong>
+                                                        </span>
+                                                    @enderror
                                             </div>
                                         </div>
                                         <div class="col p-1">

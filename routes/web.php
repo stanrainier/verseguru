@@ -24,7 +24,7 @@ Route::get('/home', function () {
 Route::get('/createaccount', function () {
     return view('/modules/registration');
 });
-Route::get('/aboutus', function () {
+Route::get('/aboutusTest', function () {
     return view('/modules/aboutus');
 });
 
@@ -36,3 +36,4 @@ Route::get('/logout', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/aboutus', [App\Http\Controllers\HomeController::class, 'aboutus'])->name('aboutus');

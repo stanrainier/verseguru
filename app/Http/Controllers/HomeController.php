@@ -25,4 +25,8 @@ class HomeController extends Controller
     {
         return view('/modules/homepage');
     }
+    public function aboutus()
+    {
+        return view('/modules/aboutus');
+    }
 }

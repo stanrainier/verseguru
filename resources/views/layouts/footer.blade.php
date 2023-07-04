@@ -1,6 +1,6 @@
-@extends('layouts.layout')
+@extends('layouts.app')
 
-@section('footer')
+@section('footer_section')
     <div class="footer d-flex">
             <div class="contact__container row">
                 <div class="contact col ml-5">

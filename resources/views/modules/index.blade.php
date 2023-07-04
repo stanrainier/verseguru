@@ -1,6 +1,6 @@
-@extends('layouts.layout')
+@extends('layouts.app')
 
-@section('content')
+@section('nav')
 <main>
 <div class ="main__wrapper container">
             <div class="col">
