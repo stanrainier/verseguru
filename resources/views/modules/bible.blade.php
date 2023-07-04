@@ -3,11 +3,13 @@
 @section('content')
 
 <head>
-  <title>Bible Page</title>
   <style>
+    
     h1 {
       text-align: center;
-
+      font-family: 'Playfair Display', serif;
+      font-size: 100px;
+    color:white;
     }
 
     .search-container {
@@ -18,6 +20,11 @@
     .search-container select {
       padding: 10px;
       font-size: 16px;
+      background-color: #f5e6ca;
+        color: #343f56;
+        border-radius: 10px;
+        margin: 0px 20px;
+        width: 30%;
     }
 
     .output-container {
