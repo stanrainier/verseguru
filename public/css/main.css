@@ -219,15 +219,16 @@
     font-family: 'Playfair Display', serif;
     font-size: 100px;
   color:white;
+  padding: 50px;
   }
 
-  .search-container {
+  .select-container {
     text-align: center;
     margin-bottom: 20px;
   }
 
-  .search-container select {
-    padding: 10px;
+  .select-container select {
+    padding: 25px;
     font-size: 16px;
     background-color: #f5e6ca;
       color: #343f56;
@@ -235,6 +236,33 @@
       margin: 0px 20px;
       width: 30%;
   }
+
+
+  .search-container {
+    text-align: right;
+    margin-right: 10%;
+  }
+  .search-container-input  {
+    border-radius: 5px;
+    border: none;
+    height: 60px;
+    background-color: #f5e6ca;
+    margin-right: 20px;
+    padding: 10px;
+  }
+  .search-container-btn {
+    background-color: #343F56;
+    border: none;
+    color: white;
+    padding: 18px 65px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+    margin-left: 20px;
+  }
+
   .output__container {
     display: flex;
     flex-direction: row;

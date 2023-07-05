@@ -15,7 +15,7 @@
 </head>
     <div class="bible__container">
             <h1>Bible Page</h1>
-        <div class="search-container">
+        <div class="select-container">
             <select id="bookSelect" onchange="loadChapters()">
                 <option value="">Select Book</option>
             </select>
@@ -23,13 +23,16 @@
                 <option value="">Select Chapter</option>
             </select>
         </div>
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-container-input" placeholder="Enter a word">
+            <input class= "search-container-btn" type="submit" value="Search" onclick="searchBible()">
+        </div>
         <div class="output__container">
-          <div class="output-container">
+            <div class="output-container">
               <h1 id="chapterHeading"></h1>
               <span id="versesList" class="verseOutput"></span>
+            </div>
           </div>
-        </div>
-    </div>
 
 <script>
   function loadBooks() {
@@ -145,6 +148,43 @@
       });
   }
 }
+
+function searchBible() {
+    var searchWord = document.getElementById("searchInput").value.toLowerCase();
+    var versesList = document.getElementById("versesList");
+    versesList.innerHTML = "";
+
+    if (searchWord.length === 0) {
+      return;
+    }
+
+    var apiKey = "fefe1d231e882b1423255e91e6d1cddf"; // Replace with your actual API key
+    var bibleVersion = "685d1470fe4d5c3b-01"; // Replace with the appropriate Bible version ID
+
+    fetch(`https://api.scripture.api.bible/v1/bibles/${bibleVersion}/search?query=${searchWord}`, {
+      headers: {
+        "api-key": apiKey
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        var verses = data.data.verses;
+        if (verses.length === 0) {
+          var noMatchMessage = document.createElement("span");
+          noMatchMessage.textContent = "No matching verses found.";
+          versesList.appendChild(noMatchMessage);
+        } else {
+          verses.forEach(function(verse) {
+            var verseItem = document.createElement("ul");
+            verseItem.textContent = verse.reference + " - " + verse.text;
+            versesList.appendChild(verseItem);
+          });
+        }
+      })
+      .catch(error => {
+        console.error("Error fetching Bible verses:", error);
+      });
+  }
 
 
   // Load books on page load

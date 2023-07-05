@@ -166,7 +166,7 @@
                         <h1>Connect With Us</h1>
                         <div class="row">
                             <div class="footer__icons">
-                                <i class="fa-brands fa-twitter" ></i>
+                                <i class="fa-sharp fa-regular fa-envelope"></i>
                             </div>
                             <div class="footer__icons">
                                 <i class="fa-brands fa-facebook"></i>
