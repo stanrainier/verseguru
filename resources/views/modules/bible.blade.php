@@ -4,49 +4,16 @@
 
 <head>
   <style>
-    
-    h1 {
-      text-align: center;
-      font-family: 'Playfair Display', serif;
-      font-size: 100px;
-    color:white;
+    body{
+      height: 0%;
+    width: 100%;
+    margin: 0 !important;
+      padding: 0 !important;
     }
-
-    .search-container {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .search-container select {
-      padding: 10px;
-      font-size: 16px;
-      background-color: #f5e6ca;
-        color: #343f56;
-        border-radius: 10px;
-        margin: 0px 20px;
-        width: 30%;
-    }
-
-    .output-container {
-      border: 1px solid #ccc;
-      padding: 60px;
-      min-height: 200px;
-      background: white;
-      margin: 100px;
-      font-size: 20px;
-      border-radius: 10px;
-    }
-    .output-container span{
-    margin-top: 20px;
-    }
-    .verseOutput{
-        margin: 50px 0px;
-        text-align: justify;
-    }
+   
   </style>
 </head>
-<main>
-    <div class="container">
+    <div class="bible__container">
             <h1>Bible Page</h1>
         <div class="search-container">
             <select id="bookSelect" onchange="loadChapters()">
@@ -56,13 +23,13 @@
                 <option value="">Select Chapter</option>
             </select>
         </div>
-        <div class="output-container">
-             <h1 id="chapterHeading"></h1>
-            <span id="versesList" class="verseOutput"></span>
+        <div class="output__container">
+          <div class="output-container">
+              <h1 id="chapterHeading"></h1>
+              <span id="versesList" class="verseOutput"></span>
+          </div>
         </div>
-
     </div>
-</main>
 
 <script>
   function loadBooks() {
