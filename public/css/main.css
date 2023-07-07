@@ -31,6 +31,9 @@
     justify-content: space-evenly !important;
     margin-left: 20px;
     }
+    .nav-linkhide{
+        display: none;
+    }
     .formatlink {
                 text-decoration: none;
                 color: inherit;
@@ -182,7 +185,16 @@
     border: none;
     height: 50px;
     }
+/* Verification */
 
+    .verification-container{
+        display: flex;
+        padding: 20%;
+    }
+    .cardVerify{
+        background: antiquewhite;
+        text-align: center
+    }
     /* about us  */
     .aboutus_card{
         background-color:#303b50 !important;

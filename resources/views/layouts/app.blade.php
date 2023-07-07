@@ -45,7 +45,8 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <img src="img/brand/logoMain.svg" alt="Logo" class="verseguruLogo" >
+            <img src="{{ asset('img/brand/logoMain.svg') }}" alt="Logo" class="verseguruLogo">
+
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Verse Guru') }}
                 </a>
@@ -58,58 +59,70 @@
                     <ul class="navbar-nav me-auto">
 
                     </ul>
-
                     <!-- Right Side Of Navbar -->
+                    @php
+                        $currentUrl = url()->current();
+                    @endphp
 
-                    <ul class="navbar-nav ">
+                    <ul class="navbar-nav">
+                    @php
+                        $currentUrl = url()->current();
+                    @endphp
                         <!-- Authentication Links -->
                         @guest
-                            @if (Route::has('login'))
+                            @if (Route::has('login') && $currentUrl != url('/email/verify'))
                                 <li class="nav-item">
-                                    <span class="nav-link" href="{{ route('login') }}"></a>
+                                    <span class="nav-linkhide" href="{{ route('login') }}">{{ __('Login') }}</a>
                                 </li>
                             @endif
 
-                            @if (Route::has('register'))
+                            @if (Route::has('register') && $currentUrl != url('/email/verify'))
                                 <li class="nav-item">
-                                    <span class="nav-link" href="{{ route('register') }}"></a>
+                                    <span class="nav-linkhide" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
                         @else
-                            <div class="navbar__item m-3">
-                                <a href="/home" class="formatlink"><span> HOME </span></a>
-                            </div>
-                            <div class="navbar__item m-3">
-                            <a href="/bible" class="formatlink"><span> BIBLE </span></a>
-                            </div>
-                            <div class="navbar__item m-3">
-                                <a href="#" class="formatlink"><span> BOOKMARKS </span></a>
-                            </div>
-                            <div class="navbar__item m-3">
-                                <a href="#" class="formatlink"><span> HISTORY </span></a>
-                            </div>
-                            <li class="nav-item dropdown m-auto">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href=#
-                                       onclick="event.preventDefault();
-                                                    //  document.getElementById('logout-form').submit();">
-                                        {{ __('My Profile') }}
-                                    </a>
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
+                            @if (auth()->check() && auth()->user()->hasVerifiedEmail())
+                                <div class="navbar__item m-3">
+                                    <a href="/home" class="formatlink"><span> HOME </span></a>
                                 </div>
-                            </li>
+                                <div class="navbar__item m-3">
+                                    <a href="/bible" class="formatlink"><span> BIBLE </span></a>
+                                </div>
+                                <div class="navbar__item m-3">
+                                    <a href="#" class="formatlink"><span> BOOKMARKS </span></a>
+                                </div>
+                                <div class="navbar__item m-3">
+                                    <a href="#" class="formatlink"><span> HISTORY </span></a>
+                                </div>
+                                <li class="nav-item dropdown m-auto">
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        {{ Auth::user()->name }}
+                                    </a>
+
+                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="#" onclick="event.preventDefault();">{{ __('My Profile') }}</a>
+                                        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                            @csrf
+                                        </form>
+                                    </div>
+                                </li>
+                            @else
+                                @if (Route::has('login') && $currentUrl != url('/email/verify'))
+                                    <li class="nav-item">
+                                        <span class="nav-linkhide" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                    </li>
+                                @endif
+
+                                @if (Route::has('register') && $currentUrl != url('/email/verify'))
+                                    <li class="nav-item">
+                                        <span class="nav-linkhide" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    </li>
+                                @endif
+                            @endif
+                            
                         @endguest
                     </ul>
                 </div>
