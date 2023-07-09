@@ -3,9 +3,17 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use App\Http\Controllers\SearchHistoryController;
 
-Route::get('/', function () {
-    return view('/auth/login');
+
+Route::middleware(['guest'])->group(function () {
+    Route::get('/', function () {
+        return view('/auth/login');
+    });
+
+    Route::get('/createaccount', function () {
+        return view('/modules/registration');
+    });
 });
 
 Route::middleware(['verified'])->group(function () {
@@ -13,18 +21,16 @@ Route::middleware(['verified'])->group(function () {
         return view('/modules/homepage');
     });
 
-    // Add your other routes that should be accessible only to verified users
+    //routes that are accessible only to verified users
     Route::get('/aboutus', [App\Http\Controllers\HomeController::class, 'aboutus'])
         ->name('aboutus');
 
     Route::get('/bible', [App\Http\Controllers\HomeController::class, 'bible'])
         ->name('bible');
+        
 });
 
-Route::get('/createaccount', function () {
-    return view('/modules/registration');
-});
-
+// guest 
 Route::get('/aboutusTest', function () {
     return view('/modules/aboutus');
 });
@@ -39,6 +45,8 @@ Route::get('/bibleTest', function () {
 
 Auth::routes(['verify' => true]);
 
+
+// signed in
 Route::middleware(['signed'])->group(function () {
     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
         $user = $request->user();
@@ -62,3 +70,14 @@ Route::post('/email/verification-notification', function (Request $request) {
     return back()->with('message', 'Verification link sent!');
 })->middleware(['throttle:6,1'])->name('verification.send');
 
+
+// Search history
+
+Route::post('/search', [SearchHistoryController::class, 'search'])->name('search');
+
+Route::get('/history', [SearchHistoryController::class, 'index'])
+    ->name('search-history')
+    ->middleware('auth');
+
+// Route::get('/search-history', 'SearchHistoryController@index')->name('search-history')->middleware('auth');
+// Route::post('/search', [SearchHistoryController::class, 'search'])->name('search');

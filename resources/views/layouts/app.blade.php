@@ -93,7 +93,7 @@
                                     <a href="#" class="formatlink"><span> BOOKMARKS </span></a>
                                 </div>
                                 <div class="navbar__item m-3">
-                                    <a href="#" class="formatlink"><span> HISTORY </span></a>
+                                    <a href="/history" class="formatlink"><span> HISTORY </span></a>
                                 </div>
                                 <li class="nav-item dropdown m-auto">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

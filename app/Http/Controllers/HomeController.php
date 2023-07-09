@@ -33,4 +33,8 @@ class HomeController extends Controller
     {
         return view('/modules/bible');
     }
+    public function searchHistory()
+    {
+        return view('/modules/searchHistory');
+    }
 }
