@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\SearchHistoryController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 
 
@@ -103,4 +104,20 @@ Route::middleware(['auth'])->group(function () {
 // upload pfp
 
 Route::post('/upload-profile-picture', [App\Http\Controllers\ProfileController::class, 'uploadProfilePicture'])->name('upload-profile-picture');
+
+// edit information
+
+// Route::match(['get', 'post', 'put'], '/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+Route::match(['post', 'put'], '/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
+Route::middleware(['auth'])->group(function () {
+    // Routes for authenticated users
+    Route::get('/profile', [UserController::class, 'showProfile'])->name('profile');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/authenticate', [ProfileController::class, 'authenticate'])->name('profile.authenticate');
+    // Add more authenticated user routes as needed
+});
+
+Route::post('/profile/authenticate', [ProfileController::class, 'authenticate'])->name('profile.authenticate');
+
 
