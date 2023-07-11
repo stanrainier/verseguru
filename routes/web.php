@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\SearchHistoryController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 
 
 Route::middleware(['guest'])->group(function () {
@@ -31,9 +32,7 @@ Route::middleware(['verified'])->group(function () {
 });
 
 // guest 
-Route::get('/aboutusTest', function () {
-    return view('/modules/aboutus');
-});
+
 
 Route::get('/logout', function () {
     return route('logout');
@@ -81,3 +80,27 @@ Route::get('/history', [SearchHistoryController::class, 'index'])
 
 // Route::get('/search-history', 'SearchHistoryController@index')->name('search-history')->middleware('auth');
 // Route::post('/search', [SearchHistoryController::class, 'search'])->name('search');
+
+
+// Reset password
+Route::middleware(['auth'])->group(function () {
+    Route::get('/resetpassword/{token}', function ($token) {
+        return view('auth.passwords.reset', compact('token'));
+    })->name('password.reset');
+});
+
+
+//profile
+
+use App\Http\Controllers\UserController;
+
+Route::middleware(['auth'])->group(function () {
+    // Routes for authenticated users
+    Route::get('/profile', [UserController::class, 'showProfile'])->name('profile');
+    // Add more authenticated user routes as needed
+});
+
+// upload pfp
+
+Route::post('/upload-profile-picture', [App\Http\Controllers\ProfileController::class, 'uploadProfilePicture'])->name('upload-profile-picture');
+

@@ -54,7 +54,7 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'username' => ['required', 'string', 'max:18'],
+            'username' => ['required', 'string', 'max:18', 'unique:users'],
         ]);
     }
 
@@ -66,13 +66,21 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => Hash::make($data['password']),
             'username' => $data['username'],
+            'password' => Hash::make($data['password']),
         ]);
+
+        // Set default profile picture
+        $defaultProfilePicture = 'profile-pictures/defaultPFP.jpg';
+        $user->profile_picture = $defaultProfilePicture;
+        $user->save();
+
+        return $user;
     }
+
     protected function registered(Request $request, $user)
     {
         $user->sendEmailVerificationNotification();

@@ -17,10 +17,16 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var array<int, string>
      */
+
+     public function profilePicture()
+     {
+         return $this->hasOne(ProfilePicture::class);
+     }
     protected $fillable = [
         'name',
         'email',
         'password',
+        'profile_picture',
     ];
 
     /**
