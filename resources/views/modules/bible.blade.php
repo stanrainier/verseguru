@@ -70,7 +70,7 @@
       var searchQuery = document.getElementById('searchInput').value;
 
       // Call the searchBible() function
-      searchBible(searchQuery);
+searchBible(searchQuery);
     });
 
     // Function to perform the Bible search
@@ -96,6 +96,14 @@
     .then(response => response.json())
     .then(data => {
       var verses = data.data.verses;
+      
+      // Sort verses based on the number of occurrences of the searched word
+      verses.sort((a, b) => {
+        var occurrencesA = countOccurrences(a.text.toLowerCase(), searchWords);
+        var occurrencesB = countOccurrences(b.text.toLowerCase(), searchWords);
+        return occurrencesB - occurrencesA;
+      });
+
       if (verses.length === 0) {
         var noMatchMessage = document.createElement('span');
         noMatchMessage.textContent = 'No matching verses found.';
@@ -125,8 +133,7 @@
 
           versesList.appendChild(verseItem);
         });
-        chapterHeading.textContent = "Search results for: "+'"'+searchWords+'"';
-
+        chapterHeading.textContent = "Search results for: " + '"' + searchWords + '"';
       }
 
       // Send search query to server
@@ -136,8 +143,20 @@
     .catch(error => {
       console.error('Error fetching Bible verses:', error);
     });
-
 }
+
+// Function to count the occurrences of a word in a text
+function countOccurrences(text, searchWords) {
+  var count = 0;
+  searchWords.forEach(word => {
+    var regex = new RegExp('\\b' + word + '\\b', 'gi');
+    var matches = text.match(regex);
+    count += matches ? matches.length : 0;
+  });
+  return count;
+}
+
+
 
 function sendSearchQuery(searchQuery) {
   fetch('{{ route('search') }}', {
