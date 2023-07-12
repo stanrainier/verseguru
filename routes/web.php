@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\SearchHistoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\UserController;
 
 
 Route::middleware(['guest'])->group(function () {
@@ -84,20 +85,28 @@ Route::get('/history', [SearchHistoryController::class, 'index'])
 
 
 // Reset password
-Route::middleware(['auth'])->group(function () {
-    Route::get('/resetpassword/{token}', function ($token) {
-        return view('auth.passwords.reset', compact('token'));
-    })->name('password.reset');
-});
+Auth::routes(['reset' => true]);
+
+Route::get('/password/reset/{token}/{email}', [UserController::class, 'showResetForm'])->name('password.reset.form');
+Route::post('/password/update', [App\Http\Controllers\Auth\ResetPasswordController::class, 'reset'])->name('password.update');
+
+
+
+// Route::middleware(['auth'])->group(function () {
+//     Route::get('/resetpassword/{token}', function ($token) {
+//         return view('auth.passwords.reset', compact('token'));
+//     })->name('password.reset');
+// });
 
 
 //profile
 
-use App\Http\Controllers\UserController;
 
 Route::middleware(['auth'])->group(function () {
-    // Routes for authenticated users
+    // Profile routes
     Route::get('/profile', [UserController::class, 'showProfile'])->name('profile');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/authenticate', [ProfileController::class, 'authenticate'])->name('profile.authenticate');
     // Add more authenticated user routes as needed
 });
 

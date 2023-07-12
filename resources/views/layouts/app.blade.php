@@ -38,9 +38,7 @@
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
     <!-- Axios  -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
 
   </head>
 
@@ -99,7 +97,7 @@
                                     <a href="/history" class="formatlink"><span> HISTORY </span></a>
                                 </div>
                                 <li class="nav-item dropdown m-auto">
-                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle " href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                         <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}" alt="{{ Auth::user()->name }}" class="pfp" >
                                         {{ Auth::user()->name }}
                                     </a>

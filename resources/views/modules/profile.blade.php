@@ -51,6 +51,9 @@
                                 <input type="password" name="password" placeholder="Enter your password to save changes" required>
                                 <button type="submit">Save</button>
                             </div>
+                            <a href="{{ $resetUrl }}">Reset Password</a>
+
+
                         </form>
                     </div>
                 </div>
