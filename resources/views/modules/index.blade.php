@@ -24,6 +24,9 @@
                                     <div class="input-group mb-3">
                                         <input type="password" class="form-control password" placeholder="Password">
                                     </div>
+                                    <span class="passwordvisibility" onclick="togglePasswordVisibility()">
+                                        <i id="togglePasswordIcon" class="fa fa-eye-slash"></i>
+                                        </span>
                                 </div>
                                 <div class="login__options d-flex col justify-content-around mt-4">
                                     <div class="d-flex col justify-content-start">

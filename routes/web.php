@@ -8,7 +8,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\UserController;
 
-
 Route::middleware(['guest'])->group(function () {
     Route::get('/', function () {
         return view('/auth/login');
@@ -34,7 +33,6 @@ Route::middleware(['verified'])->group(function () {
 });
 
 // guest 
-
 
 Route::get('/logout', function () {
     return route('logout');
@@ -75,14 +73,12 @@ Route::post('/email/verification-notification', function (Request $request) {
 // Search history
 
 Route::post('/search', [SearchHistoryController::class, 'search'])->name('search');
+Route::delete('/search-history/delete/{id}', [SearchHistoryController::class, 'deleteSingle'])->name('search-history.delete');
+Route::delete('/search-history/delete-all', [SearchHistoryController::class, 'deleteAll'])->name('search-history.delete-all');
 
 Route::get('/history', [SearchHistoryController::class, 'index'])
     ->name('search-history')
     ->middleware('auth');
-
-// Route::get('/search-history', 'SearchHistoryController@index')->name('search-history')->middleware('auth');
-// Route::post('/search', [SearchHistoryController::class, 'search'])->name('search');
-
 
 // Reset password
 Auth::routes(['reset' => true]);
@@ -101,7 +97,6 @@ Route::post('/password/update', [App\Http\Controllers\Auth\ResetPasswordControll
 
 //profile
 
-
 Route::middleware(['auth'])->group(function () {
     // Profile routes
     Route::get('/profile', [UserController::class, 'showProfile'])->name('profile');
@@ -116,7 +111,6 @@ Route::post('/upload-profile-picture', [App\Http\Controllers\ProfileController::
 
 // edit information
 
-// Route::match(['get', 'post', 'put'], '/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 Route::match(['post', 'put'], '/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 
 Route::middleware(['auth'])->group(function () {
@@ -128,5 +122,10 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::post('/profile/authenticate', [ProfileController::class, 'authenticate'])->name('profile.authenticate');
+
+// Other routes
+// Place your other routes here
+
+
 
 

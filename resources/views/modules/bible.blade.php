@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@push('scripts')
+    <script src="{{ asset('js/global.js') }}"></script>
+@endpush
+
 @section('content')
 
 <head>
@@ -25,7 +29,27 @@
     display: flex;
     justify-content: flex-end;
     margin-right: 19%;
-}
+    }
+    .pagination-container{
+      display: none;
+    margin-top: 10px;
+    justify-content: flex-end;
+
+    }
+    .pagination-button{
+      background-color: #343F56;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        border-radius: 5px;
+        transition-duration: 0.4s;
+        margin-left: 20px !important;
+        border: solid 1px;
+    }
   </style>
 </head>
 
@@ -59,22 +83,37 @@
     <div class="output-container">
       <h2 id="chapterHeading" class="chapter__heading"></h2>
       <div id="versesList" class="verseOutput"></div>
+      <div class="pagination-container" id="paginationContainer">
+        <button id="previousChapterBtn" class="pagination-button" onclick="loadPreviousChapter()">Previous</button>
+        <button id="nextChapterBtn" class="pagination-button" onclick="loadNextChapter()">Next</button>
+      </div>
     </div>
   </div>
 
   <script>
-    document.getElementById('searchForm').addEventListener('submit', function(event) {
-      event.preventDefault(); // Prevent the default form submission
 
-      // Get the search query
-      var searchQuery = document.getElementById('searchInput').value;
+// Search bible trigger
 
-      // Call the searchBible() function
+document.getElementById('searchForm').addEventListener('submit', function(event) {
+event.preventDefault(); // Prevent the default form submission
+var searchQuery = document.getElementById('searchInput').value;
 searchBible(searchQuery);
-    });
+});
 
-    // Function to perform the Bible search
-    function searchBible() {
+// Function to perform the Bible search from search history
+
+const urlParams = new URLSearchParams(window.location.search);
+const searchQuery = urlParams.get('search');
+// Check if a search query exists in the URL
+if (searchQuery) {
+  // Set the search query in the search input field
+  document.getElementById('searchInput').value = decodeURIComponent(searchQuery);
+  searchBible()
+}
+
+// Search bible main script 
+
+  function searchBible() {
   var searchWords = document.getElementById('searchInput').value.toLowerCase().split(' ');
   var versesList = document.getElementById('versesList');
   var chapterHeading = document.getElementById('chapterHeading');
@@ -145,6 +184,7 @@ searchBible(searchQuery);
     });
 }
 
+
 // Function to count the occurrences of a word in a text
 function countOccurrences(text, searchWords) {
   var count = 0;
@@ -206,9 +246,10 @@ function sendSearchQuery(searchQuery) {
     }
 
     function loadBooks() {
-      var apiKey = 'fefe1d231e882b1423255e91e6d1cddf';
+      var apiKey = 'ba3dd6aab618044bd1a336b08f408a5f';
       var apiUrl = 'https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/books';
       var bookSelect = document.getElementById('bookSelect');
+      var paginationContainer = document.getElementById('paginationContainer');
 
       fetch(apiUrl, {
         headers: {
@@ -309,6 +350,8 @@ function sendSearchQuery(searchQuery) {
 
                 // Display header of chapter
                 chapterHeading.textContent = chapterSelect.options[chapterSelect.selectedIndex].textContent;
+
+                paginationContainer.style.display = 'flex';
               })
               .catch(error => {
                 console.error('Error fetching Bible verses:', error);
@@ -361,5 +404,28 @@ function sendSearchQuery(searchQuery) {
         createShareWindow(verseReference, verseText);
       }
     });
+
+    function loadPreviousChapter() {
+  var chapterSelect = document.getElementById('chapterSelect');
+  var currentIndex = chapterSelect.selectedIndex;
+  
+  // Load the previous chapter if available
+  if (currentIndex > 0) {
+    chapterSelect.selectedIndex = currentIndex - 1;
+    loadVerses();
+  }
+}
+
+function loadNextChapter() {
+  var chapterSelect = document.getElementById('chapterSelect');
+  var currentIndex = chapterSelect.selectedIndex;
+  
+  // Load the next chapter if available
+  if (currentIndex < chapterSelect.options.length - 1) {
+    chapterSelect.selectedIndex = currentIndex + 1;
+    loadVerses();
+  }
+}
+
   </script>
 @endsection

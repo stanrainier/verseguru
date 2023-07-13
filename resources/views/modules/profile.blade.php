@@ -1,5 +1,6 @@
 @extends('layouts.app')
 <style>
+
 </style>
 @section('content')
     <div class="profile-main">
@@ -15,8 +16,10 @@
                         @endif
                         <form method="POST" action="{{ route('upload-profile-picture') }}" enctype="multipart/form-data">
                             @csrf
-                            <input type="file" name="profile_picture" class="profile-edit">
-                            <button type="submit">Upload</button>
+                            <div class="upload-profile-pic">
+                                <input type="file" name="profile_picture" class="profile-edit">
+                                <button type="submit">Upload</button>
+                            </div>
                         </form>
                     </div>
                     <div class="profile-right">
@@ -48,11 +51,19 @@
                             </div>
 
                             <div class="profile-edit">
-                                <input type="password" name="password" placeholder="Enter your password to save changes" required>
+                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password" placeholder="Password">        
+                            <span class="passwordvisibility" onclick="togglePasswordVisibility()">
+                             <i id="togglePasswordIcon" class="fa fa-eye-slash"></i>
+                            </span>
+
+                            @error('password')
+                                <span class="invalid-feedback" role="alert" style="z-index:1;">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                                 <button type="submit">Save</button>
                             </div>
-                            <a href="{{ $resetUrl }}">Reset Password</a>
-
+                            <a href="">Reset Password</a>
 
                         </form>
                     </div>

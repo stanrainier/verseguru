@@ -1,7 +1,20 @@
 @extends('layouts.app')
 
 
+<style>
+    .password-input {
+    position: relative;
+}
 
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+    </style>
 @section('content')
 <main>
 <div class ="main__wrapper container">
@@ -33,6 +46,9 @@
                                     <div class="input-group mb-3">
                                         <!-- <input type="password" class="form-control password" placeholder="Password"> -->
                                         <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Password">
+                                        <span class="passwordvisibility" onclick="togglePasswordVisibility()">
+                                        <i id="togglePasswordIcon" class="fa fa-eye-slash"></i>
+                                        </span>
                                         @error('password')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>

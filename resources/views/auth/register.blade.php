@@ -57,6 +57,9 @@
                                             <div class="input-group mb-3">
                                                 <!-- <input type="password" class="form-control password" placeholder="Password"> -->
                                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password" placeholder="Password">
+                                                <span class="passwordvisibility" onclick="togglePasswordVisibility()">
+                                                <i id="togglePasswordIcon" class="fa fa-eye-slash"></i>
+                                                </span>
                                                 @error('password')
                                                     <span class="invalid-feedback" role="alert">
                                                         <strong>{{ $message }}</strong>
@@ -67,7 +70,6 @@
                                         <div class="col p-1">
                                             <div class="input-group mb-3">
                                                  <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password" placeholder="Confirm Password">
-
                                             </div>
                                         </div>
                                     </div>

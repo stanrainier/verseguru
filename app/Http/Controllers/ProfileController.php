@@ -42,7 +42,14 @@ class ProfileController extends Controller
 
         // Validate the password
         $request->validate([
-            'password' => 'required',
+            'password' => [
+                'required',
+                function ($attribute, $value, $fail) use ($user) {
+                    if (!Hash::check($value, $user->password)) {
+                        $fail('Incorrect password. Profile information not updated.');
+                    }
+                },
+            ],
         ]);
 
         // Check if the entered password matches the user's password

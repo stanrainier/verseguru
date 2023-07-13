@@ -52,6 +52,15 @@
 
 
 
+
+
+    .passwordvisibility{
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        background-color: #f5e6ca;
+    }
+
     /* index | Loginpage*/
 
 
@@ -302,11 +311,11 @@
       width: 30%;
   }
 
-  .search-container {
+  /* .search-container { */
     /* text-align: right;
     margin-right: 19%;
     margin-top: 2%; */
-  }
+  /* } */
   .search-container-input  {
     border-radius: 5px;
     border: none;
@@ -467,6 +476,10 @@ width: 500px;
     display: flex;
     justify-content: space-around;
 }
+.profile-edit input{
+    border-radius: 0px !important;
+}
+
 
 .profile-main input{
     border:none;
@@ -494,7 +507,21 @@ input::placeholder {
     margin-left: 20px;
 }
 
-
+.upload-profile-pic{
+    display: flex;
+flex-direction: column;
+align-items: center;
+}
+.upload-profile-pic input{
+    margin: 25px 0px !important; 
+}
+.upload-profile-pic button{    
+    width: 100% !important;
+    }
+.profile-card button:hover{
+    background: green;
+    transition: 1s;
+}
 
 
 
@@ -539,9 +566,11 @@ input::placeholder {
     margin: 10px;
     display: flex;
     justify-content: space-between;
+    background: white;
 }
 .search-result span{
     font-size: 20px;
+    text-align: center;
 }
 .search-result i{
     font-size: 15px;
