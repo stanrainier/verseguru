@@ -36,7 +36,7 @@
                                 <div class="login__form d-flex row my-4">
                                     <div class="input-group mb-3">
                                         <!-- <input type="text" class="form-control username" placeholder="Username"> -->
-                                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="E-mail">
+                                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') ?? old('username') }}" required autocomplete="email" autofocus placeholder="E-mail or Username">
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -62,7 +62,7 @@
                                         <span style="margin-left: 5px;">Keep me logged in</span>
                                     </div>
                                     <div class="d-flex flex-column-reverse justify-content-end">
-                                        <a href="#">Forgot Password?</a>
+                                        <a href="/forgot-password">Forgot Password?</a>
                                     </div>
                                 </div>
                                 <div class="login__btn d-flex col justify-content-around align-items-end mt-4">

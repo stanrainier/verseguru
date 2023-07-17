@@ -165,12 +165,12 @@
                                         <span><a href="/home">HOME</a></span>
                                     </div>
                                     <div class="row mt-4">
-                                        <span><a>BIBLE</a></span>
+                                        <span><a href="{{ route('bible') }}">BIBLE</a></span>
                                     </div>
                                 </div>
                                 <div class="row ">
                                     <div class="row mt-4">
-                                        <span><a href="/aboutus">ABOUT US</a></span>
+                                        <span><a href="{{ route('aboutus') }}">ABOUT US</a></span>
                                     </div>
                                     <div class="row mt-4">
                                         <span><a>BOOKMARKS</a></span>

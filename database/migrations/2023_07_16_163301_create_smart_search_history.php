@@ -11,15 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('search_histories', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->string('search_query');
-            $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-        });
-
         Schema::create('smart_search_histories', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
@@ -28,6 +19,8 @@ return new class extends Migration
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
+
+        
     }
 
     /**
@@ -35,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('search_histories');
+        Schema::dropIfExists('smart_search_history');
     }
 };

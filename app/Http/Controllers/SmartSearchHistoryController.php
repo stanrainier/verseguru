@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SearchHistory;
 use App\Models\SmartSearchHistory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
-class SearchHistoryController extends Controller
+class SmartSearchHistoryController extends Controller
 {
-    public function search(Request $request)
+    public function smartsearch(Request $request)
     {
         // Perform the search
 
@@ -18,33 +17,33 @@ class SearchHistoryController extends Controller
             $searchQuery = $request->input('query');
             $userId = Auth::id();
 
-            SearchHistory::create([
+            SmartSearchHistory::create([
                 'user_id' => $userId,
                 'search_query' => $searchQuery,
             ]);
         }
 
         // Return search results or redirect
-        return response()->json(['message' => 'Search results']); // Replace this with your desired response
+        // return response()->json(['message' => 'Search results']); // Replace this with your desired response
+        // return response()->json(['message' => 'Search results']); // Replace this with your desired response
+        // return response()->json(['message' => 'Search results']); // Replace this with your desired response
+        return redirect('/');
     }
     
 
     public function index()
     {
         $userId = Auth::id();
-        $searchHistory = SearchHistory::where('user_id', $userId)
+        $searchHistory = SmartSearchHistory::where('user_id', $userId)
             ->orderBy('created_at', 'desc')
             ->get();
-        $smartsearchHistory = SmartSearchHistory::where('user_id', $userId)
-        ->orderBy('created_at', 'desc')
-        ->get();
 
-        return view('modules.searchHistory', compact('searchHistory', 'smartsearchHistory'));
+        return view('modules.searchHistory', ['smartsearchHistory' => $searchHistory]);
     }
 
     public function deleteSingle($id)
     {
-        $searchHistory = SearchHistory::find($id);
+        $searchHistory = SmartSearchHistory::find($id);
         
         if (!$searchHistory) {
             return response()->json(['message' => 'Search history not found'], 404);
@@ -58,7 +57,7 @@ class SearchHistoryController extends Controller
     public function deleteAll()
     {
         $userId = Auth::id();
-        SearchHistory::where('user_id', $userId)->delete();
+        SmartSearchHistory::where('user_id', $userId)->delete();
 
         return response()->json(['message' => 'All search history deleted']);
     }

@@ -50,6 +50,7 @@
         margin-left: 20px !important;
         border: solid 1px;
     }
+
   </style>
 </head>
 

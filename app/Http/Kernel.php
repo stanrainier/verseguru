@@ -43,6 +43,9 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
+        'password_reset' => [
+            \Illuminate\Routing\Middleware\ThrottleRequests::class.':5,1', // Adjust the rate limiting as needed
+        ],
     ];
 
     /**

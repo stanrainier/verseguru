@@ -17,7 +17,7 @@
                         <form method="POST" action="{{ route('upload-profile-picture') }}" enctype="multipart/form-data">
                             @csrf
                             <div class="upload-profile-pic">
-                                <input type="file" name="profile_picture" class="profile-edit">
+                                <input type="file" name="profile_picture" class="uploadpfp-input profile-edit ">
                                 <button type="submit">Upload</button>
                             </div>
                         </form>
@@ -63,7 +63,7 @@
                             @enderror
                                 <button type="submit">Save</button>
                             </div>
-                            <a href="">Reset Password</a>
+                            <a href="{{ route('password.request') }}">Reset Password</a>
 
                         </form>
                     </div>

@@ -42,11 +42,16 @@ class LoginController extends Controller
     {
         if (!$user->hasVerifiedEmail()) {
             $this->guard()->logout(); // Logout the user
-
+    
             return redirect()->route('verification.notice')
                 ->with('message', 'Please verify your email before logging in.');
         }
-
+    
+        // Store the user's token in the session
+        $token = $user->token; // Replace this with your actual token field name in the user model
+        $request->session()->put('token', $token);
+    
         return redirect()->intended($this->redirectPath());
     }
+    
 }
