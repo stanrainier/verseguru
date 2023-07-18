@@ -15,42 +15,6 @@
       padding: 0 !important;
     }
     
-    .bible-search-card{
-      height: 25%;
-      width: 32%;
-    background-color: white;
-    border-radius: 10px;
-    }
-    .bible-search-body{
-    height: 100px;
-    padding: 20px;
-    }
-    .search-container {
-    display: flex;
-    justify-content: flex-end;
-    margin-right: 19%;
-    }
-    .pagination-container{
-      display: none;
-    margin-top: 10px;
-    justify-content: flex-end;
-
-    }
-    .pagination-button{
-      background-color: #343F56;
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        border-radius: 5px;
-        transition-duration: 0.4s;
-        margin-left: 20px !important;
-        border: solid 1px;
-    }
-
   </style>
 </head>
 
@@ -73,6 +37,7 @@
                     <div class="input-group">
                     <input type="text" name="query" id="searchInput" class="search-container-input" placeholder="Enter a word">
                     </div>
+                      <button class="speak-btn" onclick="startSpeechToText()"><i class="fas fa-microphone"></i></button>
                     <div class="search__button">
                       <button type="submit" class="search-container-btn">Search</button>
                     </div>
@@ -114,7 +79,7 @@ if (searchQuery) {
 
 // Search bible main script 
 
-  function searchBible() {
+function searchBible() {
   var searchWords = document.getElementById('searchInput').value.toLowerCase().split(' ');
   var versesList = document.getElementById('versesList');
   var chapterHeading = document.getElementById('chapterHeading');
@@ -136,7 +101,7 @@ if (searchQuery) {
     .then(response => response.json())
     .then(data => {
       var verses = data.data.verses;
-      
+
       // Sort verses based on the number of occurrences of the searched word
       verses.sort((a, b) => {
         var occurrencesA = countOccurrences(a.text.toLowerCase(), searchWords);
@@ -145,26 +110,37 @@ if (searchQuery) {
       });
 
       if (verses.length === 0) {
-        var noMatchMessage = document.createElement('span');
+        var noMatchMessage = document.createElement('div');
         noMatchMessage.textContent = 'No matching verses found.';
         versesList.appendChild(noMatchMessage);
       } else {
+        // Output | Result from search bible
         verses.forEach(function (verse) {
           var verseItem = document.createElement('li');
           verseItem.classList.add('verse-item');
-          verseItem.style.marginBottom = '10px';
+          verseItem.style.marginBottom = '30px';
           var verseText = verse.text;
           var highlightedText = highlightSearchQuery(verseText, searchWords);
+
+          // Create a button to speak the verse
+          var speakBtn = document.createElement('button');
+          speakBtn.classList.add('speak-btn');
+          speakBtn.innerHTML = "<i class='fas fa-volume-up'></i>";
+          speakBtn.addEventListener('click', function () {
+            speakText(verseText);
+          });
+          verseItem.innerHTML = verse.reference + ' - ' + highlightedText;
+          verseItem.appendChild(speakBtn);
+
           var bookmarkBtn = document.createElement('button');
           bookmarkBtn.classList.add('bookmark-btn');
           bookmarkBtn.innerHTML = "<i class='fas fa-bookmark'></i>";
           bookmarkBtn.addEventListener('click', function () {
             handleBookmark(verse.reference, verseText);
           });
-          verseItem.innerHTML = verse.reference + ' - ' + highlightedText;
           verseItem.appendChild(bookmarkBtn);
 
-          var shareIcons = document.createElement('div');
+          var shareIcons = document.createElement('span');
           shareIcons.classList.add('share-icons');
           var twitterLink = createTwitterShareLink(verse.reference, verseText);
           var facebookLink = createFacebookShareLink(verse.reference, verseText);
@@ -184,7 +160,6 @@ if (searchQuery) {
       console.error('Error fetching Bible verses:', error);
     });
 }
-
 
 // Function to count the occurrences of a word in a text
 function countOccurrences(text, searchWords) {
@@ -235,14 +210,14 @@ function sendSearchQuery(searchQuery) {
     function createTwitterShareLink(reference, text) {
       var twitterText = reference + ' - ' + text + ' Verse Guru';
       var twitterUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(twitterText);
-      var twitterLink = "<a href='" + twitterUrl + "' target='_blank'><i class='fab fa-twitter'></i></a>";
+      var twitterLink = "<a href='" + twitterUrl + "' target='_blank'><i class='fab fa-twitter twittericon'></i></a>";
       return twitterLink;
     }
 
     // Function to create a Facebook share link
     function createFacebookShareLink(reference, text) {
       var facebookUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href);
-      var facebookLink = "<a href='" + facebookUrl + "' target='_blank'><i class='fab fa-facebook'></i></a>";
+      var facebookLink = "<a href='" + facebookUrl + "' target='_blank'><i class='fab fa-facebook fbicon'></i></a>";
       return facebookLink;
     }
 
@@ -301,68 +276,79 @@ function sendSearchQuery(searchQuery) {
     }
 
     function loadVerses() {
-      var bookId = document.getElementById('bookSelect').value;
-      var chapterId = document.getElementById('chapterSelect').value;
-      var versesList = document.getElementById('versesList');
-      var chapterHeading = document.getElementById('chapterHeading');
+  var bookId = document.getElementById('bookSelect').value;
+  var chapterId = document.getElementById('chapterSelect').value;
+  var versesList = document.getElementById('versesList');
+  var chapterHeading = document.getElementById('chapterHeading');
+  var chapterText = ''; // Variable to store the chapter text
 
-      versesList.innerHTML = '';
+  versesList.innerHTML = '';
 
-      if (chapterId !== '') {
-        var apiKey = 'fefe1d231e882b1423255e91e6d1cddf';
-        var apiUrl = `https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/chapters/${chapterId}/verses`;
+  if (chapterId !== '') {
+    var apiKey = 'fefe1d231e882b1423255e91e6d1cddf';
+    var apiUrl = `https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/chapters/${chapterId}/verses`;
 
-        fetch(apiUrl, {
-          headers: {
-            'api-key': apiKey
-          }
-        })
-          .then(response => response.json())
-          .then(data => {
-            var verseIds = data.data.map(verse => verse.id);
-            var versePromises = verseIds.map(verseId => {
-              var verseApiUrl = `https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/verses/${verseId}`;
-              return fetch(verseApiUrl, {
-                headers: {
-                  'api-key': apiKey
-                }
-              }).then(response => response.json());
+    fetch(apiUrl, {
+      headers: {
+        'api-key': apiKey
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        var verseIds = data.data.map(verse => verse.id);
+        var versePromises = verseIds.map(verseId => {
+          var verseApiUrl = `https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/verses/${verseId}`;
+          return fetch(verseApiUrl, {
+            headers: {
+              'api-key': apiKey
+            }
+          }).then(response => response.json());
+        });
+
+        Promise.all(versePromises)
+          .then(verses => {
+            verses.sort((a, b) => {
+              var refA = parseInt(a.data.reference.split(' ')[1]);
+              var refB = parseInt(b.data.reference.split(' ')[1]);
+              return refA - refB;
             });
 
-            Promise.all(versePromises)
-              .then(verses => {
-                verses.sort((a, b) => {
-                  var refA = parseInt(a.data.reference.split(' ')[1]);
-                  var refB = parseInt(b.data.reference.split(' ')[1]);
-                  return refA - refB;
-                });
+            verses.forEach(verse => {
+              var verseItem = document.createElement('span');
+              const reference = verse.data.reference;
+              const content = verse.data.content.replace(/<\/?p[^>]*>|<\/?span[^>]*>/g, '');
+              verseItem.textContent = content;
+              verseItem.dataset.reference = reference;
+              chapterText += content + ' '; // Concatenate the verse text
 
-                verses.forEach(verse => {
-                  var verseItem = document.createElement('span');
-                  const reference = verse.data.reference;
-                  const content = verse.data.content.replace(/<\/?p[^>]*>|<\/?span[^>]*>/g, '');
-                  const verseNumber = reference.match(/\d+$/)[0];
-                  verseItem.textContent = content;
-                  verseItem.dataset.reference = reference;
+              versesList.appendChild(verseItem);
+            });
 
+            // Display header of chapter
+            chapterHeading.textContent = chapterSelect.options[chapterSelect.selectedIndex].textContent;
 
-                  versesList.appendChild(verseItem);
-                });
+            // Create the text-to-speech button for the entire chapter
+            var speakBtn = document.createElement('div');
+            speakBtn.classList.add('speak-btn-chapter');
+            speakBtn.innerHTML = "<i class='fas fa-volume-up'></i>";
+            speakBtn.addEventListener('click', function () {
+              speakText(chapterText);
+            });
 
-                // Display header of chapter
-                chapterHeading.textContent = chapterSelect.options[chapterSelect.selectedIndex].textContent;
+            // Append the speak button to the chapter heading
+            chapterHeading.appendChild(speakBtn);
 
-                paginationContainer.style.display = 'flex';
-              })
-              .catch(error => {
-                console.error('Error fetching Bible verses:', error);
-              });
+            paginationContainer.style.display = 'flex';
           })
           .catch(error => {
-              console.error('Error fetching Bible chapters:', error);
+            console.error('Error fetching Bible verses:', error);
           });
-      }
-    }
+      })
+      .catch(error => {
+        console.error('Error fetching Bible chapters:', error);
+      });
+  }
+}
 
     // Load books on page load
     loadBooks();
@@ -427,6 +413,43 @@ function loadNextChapter() {
     loadVerses();
   }
 }
+
+// speech to text 
+// Text-to-speech function
+function speakText(text) {
+  if ('speechSynthesis' in window) {
+    var message = new SpeechSynthesisUtterance();
+    message.text = text;
+    window.speechSynthesis.speak(message);
+  } else {
+    console.log('Speech synthesis is not supported.');
+  }
+}
+
+// Modify the startSpeechToText() function to include text-to-speech
+function startSpeechToText() {
+  if (window.hasOwnProperty('webkitSpeechRecognition')) {
+    var recognition = new webkitSpeechRecognition();
+
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+    recognition.start();
+
+    recognition.onresult = function(event) {
+      var transcript = event.results[0][0].transcript;
+      document.getElementById('searchInput').value = transcript;
+      speakText(transcript); // Speak the transcribed text
+      recognition.stop();
+    };
+
+    recognition.onerror = function(event) {
+      console.error('Speech recognition error:', event.error);
+      recognition.stop();
+    };
+  }
+}
+
 
   </script>
 @endsection

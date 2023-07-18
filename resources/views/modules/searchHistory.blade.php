@@ -25,32 +25,34 @@
                     </button>
                 </div>
             </div>
-            @if ($searchHistory->isEmpty() && $smartsearchHistory->isEmpty())
+            <div class="search-history-results">
+                @if ($searchHistory->isEmpty() && $smartsearchHistory->isEmpty())
+                    <div class="search-result">
+                        <p>Nothing to see here.</p>
+                    </div>
+                @else
+                @php
+                    $mergedHistory = $searchHistory->concat($smartsearchHistory);
+                    $sortedHistory = $mergedHistory->sortByDesc('created_at');
+                @endphp
+
+                @foreach ($sortedHistory as $history)
                 <div class="search-result">
-                    <p>Nothing to see here.</p>
+                    @if ($history instanceof \App\Models\SearchHistory)
+                    <span onclick="redirectToBible('{{ $history->search_query }}')"><b>"{{ $history->search_query }}" | Bible Search</b></span>
+                    @elseif ($history instanceof \App\Models\SmartSearchHistory)
+                    <span><b>"{{ $history->search_query }}" | Smart Search</b></span>
+                    @endif
+                    <br><br>
+                    <span class="search-time">Date and Time Searched: {{ $history->created_at }}</span>
+                    <button class="search-history-delete-entry" onclick="deleteSearchHistory('{{ $history->id }}')">
+                        <i class="fa-solid fa-x"></i>
+                    </button>
                 </div>
-            @else
-            @php
-                $mergedHistory = $searchHistory->concat($smartsearchHistory);
-                $sortedHistory = $mergedHistory->sortByDesc('created_at');
-            @endphp
+                @endforeach
 
-            @foreach ($sortedHistory as $history)
-            <div class="search-result">
-                @if ($history instanceof \App\Models\SearchHistory)
-                <span onclick="redirectToBible('{{ $history->search_query }}')"><b>"{{ $history->search_query }}" | Bible Search</b></span>
-                @elseif ($history instanceof \App\Models\SmartSearchHistory)
-                <span><b>"{{ $history->search_query }}" | Smart Search</b></span>
                 @endif
-                <br><br>
-                <span class="search-time">Date and Time Searched: {{ $history->created_at }}</span>
-                <button class="search-history-delete-entry" onclick="deleteSearchHistory('{{ $history->id }}')">
-                    <i class="fa-solid fa-x"></i>
-                </button>
             </div>
-            @endforeach
-
-            @endif
         </div>
     </div>
 </div>

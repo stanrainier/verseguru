@@ -37,4 +37,8 @@ class HomeController extends Controller
     {
         return view('/modules/searchHistory');
     }
+    public function bookmarks()
+    {
+        return view('/modules/kent');
+    }
 }

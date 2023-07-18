@@ -49,6 +49,8 @@ Route::get('/logout', function () {
     return route('logout');
 });
 
+Route::get('/bookmarks', [App\Http\Controllers\HomeController::class, 'bookmarks'])
+->name('bookmarks');
 
 Route::get('/bibleTest', function () {
     return route('/modules/bible');
