@@ -340,6 +340,11 @@
     margin-left: 20px;
   }
 
+  .search-container-btn:hover{
+    transition: 1s;
+    background-color: orange;
+    color: black;
+}
   .output__container {
     display: flex;
     flex-direction: row;
@@ -500,6 +505,8 @@
   .select-container select{
     font-size: 30px;
     font-family:'Playfair Display', serif;
+    cursor: pointer;
+
   }
   .speak-btn-chapter{
   font-size: 25px;
@@ -668,31 +675,36 @@ align-items: center;
 
 /* History */
 
-.search-history-main{
+.search-history-main, .bookmarks-main {
     display: flex;
     align-items: center;
     align-content: center;
     flex-direction: column;
-}
-.search-history-container{
+  }
+  
+  .search-history-container, .bookmarks-container {
     margin: 10%;
     width: 70%;
-}
-.historyCard{
+  }
+  
+  .historyCard, .bookmarkCard {
     padding: 25px;
-}
-.search-history-heibader{
+  }
+  
+  .search-history-header, .bookmarks-header {
     margin: 5px 0px;
     margin-top: 50px;
     margin-right: 40%;
     color: white;
-}
-.search-history-header h1{
+  }
+  
+  .search-history-header h1, .bookmarks-header h1 {
     font-family: 'Playfair Display', serif !important;
     font-size: 80px;
     margin-bottom: 50px;
-}
-.search-result{
+  }
+  
+  .search-result, .bookmark-result {
     border-radius: 5px;
     border-style: solid;
     border-width: 1px;
@@ -702,52 +714,61 @@ align-items: center;
     display: flex;
     justify-content: space-between;
     background: white;
-}
-.search-history-results{
+  }
+  
+  .search-history-results, .bookmarks-results {
     overflow-y: scroll;
     height: 535px;
-}
-.search-result span{
+  }
+  
+  .search-result span, .bookmark-result span {
     font-size: 20px;
     text-align: center;
-}
-.search-result i{
+  }
+  
+  .search-result i, .bookmark-result i {
     font-size: 15px;
     font-weight: bold;
-}
-.search-history-delete-entry{
+  }
+  
+  .search-history-delete-entry, .bookmark-delete-entry {
     padding: 0px;
     border-width: thin;
     border-radius: 5px;
     width: 35px;
     height: 35px;
-}
-.search-history-delete-entry:hover{
+  }
+  
+  .search-history-delete-entry:hover, .bookmark-delete-entry:hover {
     background: red;
     transition: 1s;
-}
-.search-time{
-    color:gray;
-}
-
-.history-search-card{
+  }
+  
+  .search-time, .bookmark-time {
+    color: gray;
+  }
+  
+  /* Styling specific to the Search History section */
+  .history-search-card {
     height: 25%;
     width: 25%;
     background-color: white;
     border-radius: 10px;
     margin-right: 42%;
-}
-.history-search-body{
+  }
+  
+  .history-search-body {
     height: 100px;
     padding: 20px;
-}
-
-.search-history-delete-all-container{
+  }
+  
+  .search-history-delete-all-container {
     display: flex;
     justify-content: flex-end;
     margin: 15px 0;
-}
-.search-history-delete-all{
+  }
+  
+  .search-history-delete-all, .bookmarks-delete-all {
     background-color: #ed1a48;
     border: 1px solid;
     color: white;
@@ -758,16 +779,15 @@ align-items: center;
     font-size: 12px;
     border-radius: 5px;
     margin-right: 10px;
-}
-
-.search-history-delete-all:hover{
+  }
+  
+  .search-history-delete-all:hover, .bookmarks-delete-all:hover {
     background-color: white;
     color: #ed1a48;
     border: 1px solid;
     border-color: black;
     transition: 1s;
-}
-
+  }
 
 
 
