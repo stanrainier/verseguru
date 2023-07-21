@@ -154,6 +154,9 @@ document.querySelector('.button-smartsearch').addEventListener('click', function
         document.querySelector('.bookmarks-container').appendChild(noResultsMessage);
     }
 });
+
+
+
 </script>
 
 @endsection
