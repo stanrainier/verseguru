@@ -98,6 +98,29 @@
   color: white;
   border-color:#ff000000;
 }
+.select-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+.select-section{
+  width: 100%;
+  display: flex;
+}
+small {
+    font-size: 0.8em; 
+    vertical-align: super;
+    line-height: 1; 
+  }
+  .crossRefLink{
+    cursor:pointer;
+  }
+  .highlighted-verse {
+  background-color: yellow;
+  color: black;
+}
+
   </style>
 </head>
 
@@ -105,30 +128,36 @@
 <div class="bible__container">
   <h1>Bible Page</h1>
   <div class="select-container">
-    <select id="bookSelect" onchange="loadChapters()">
-      <option value="">Select Book</option>
-    </select>
-    <select id="chapterSelect" onchange="loadVerses()">
-      <option value="">Select Chapter</option>
-    </select>
-  </div>
-  
-  <form id="searchForm" class="search-container">
-    @csrf
-    <div class="bible-search-card">
-            <div class="bible-search-body col d-flex align-items-center">
-                    <div class="input-group">
-                    <input type="text" name="query" id="searchInput" class="search-container-input" placeholder="Enter a word">
-                    </div>
-                      <button class="speak-btn" onclick="startSpeechToText()"><i class="fas fa-microphone"></i></button>
-                    <div class="search__button">
-                      <button type="submit" class="search-container-btn">Search</button>
-                    </div>
+      <select id="bookSelect" onchange="loadChapters()">
+        <option value="">Select Book</option>
+      </select>
+      <select id="chapterSelect" onchange="loadVerses()">
+        <option value="">Select Chapter</option>
+      </select>
+    <!-- <div class="select-section">
+    </div> -->
+<div class="select-container">
+      <div class="bible-search-card">
+        <form id="searchForm">
+        @csrf
+          <div class="bible-search-body col d-flex align-items-center">
+            <div class="input-group">
+              <input type="text" name="query" id="searchInput" class="search-container-input" placeholder="Enter a word">
             </div>
-        </div>
-  </form>
+              <button class="speak-btn" onclick="startSpeechToText()"><i class="fas fa-microphone"></i></button>
+            <div class="search__button">
+              <button type="submit" class="search-container-btn">Search</button>
+            </div>
+          </div>
+          </div>
+        </form>
+      </div>
+  </div>
 
 
+
+  
+ 
   <div class="output__container">
     <div class="output-container">
     <div class="toggleCrossRef">
@@ -191,7 +220,6 @@ hideCrossReferenceIcons();
 
 
 
-// Function to show the cross-reference modal
 function showCrossReferenceModal(verseID, verseReferenceIDs) {
   var modal = document.getElementById('crossRefModal');
   var modalTitle = document.getElementById('crossrefTitle');
@@ -206,6 +234,13 @@ function showCrossReferenceModal(verseID, verseReferenceIDs) {
   verseReferenceIDs.forEach(function (verseRefID) {
     var verseRefParagraph = document.createElement('p');
     verseRefParagraph.textContent = verseRefID;
+
+
+    // Add a common class 'crossRefLink' to make the paragraph clickable
+    verseRefParagraph.classList.add('crossRefLink');
+    // Set the verse reference as a data attribute for later use
+    verseRefParagraph.dataset.verseReference = verseRefID;
+
     modalVerseReference.appendChild(verseRefParagraph);
   });
 
@@ -223,7 +258,56 @@ function showCrossReferenceModal(verseID, verseReferenceIDs) {
       modal.style.display = 'none';
     }
   });
+
+  // Handle the click on cross-reference links
+  var crossRefLinks = document.querySelectorAll('.crossRefLink');
+  crossRefLinks.forEach(function (link) {
+    link.addEventListener('click', function () {
+    var verseReference = link.dataset.verseReference;
+    console.log('Verse Reference:', verseReference); // Add this line to check the value
+    var parts = verseReference.split('.'); // Split the verseReference by dots
+    var extractedChapter = parts.slice(0, 2).join('.'); // Join the first two parts with a dot
+    var extractedBook = parts.slice(0, 1).join('.'); // Join the first part as the book name
+    var extractedVerse = parts[2]; 
+    var chapterSelect = document.getElementById('chapterSelect');
+    console.log("extractedChapter", extractedChapter);
+
+
+    document.getElementById('bookSelect').value = extractedBook;
+    chapterSelect.value = extractedChapter;
+    // Set the value of the bookSelect and chapterSelect
+    chapterSelect.textContent = verseReference;   
+    loadChapters(extractedBook);
+    loadVerses(extractedChapter); // Pass extractedChapter as an argument
+    
+    
+    var chapterHeading = document.getElementById('chapterHeading');
+    console.log("EXTRACTED CHAPTER: ", extractedChapter);
+    chapterHeading.textContent = verseReference;
+    chapterSelect.textContent = verseReference;
+
+    modal.style.display = 'none'; // Close modal
+
+    // Scroll to the selected verse within the modal
+    var selectedVerseElement = document.getElementById('data-verse-reference').value = extractedBook;
+    console.log('verseElement:', selectedVerseElement);
+    if (selectedVerseElement) {
+      selectedVerseElement.scrollIntoView({
+        behavior: 'smooth', // Scroll with smooth animation
+        block: 'center', // Center the verse in the viewport
+      });
+      // Highlight the selected verse by adding a CSS class
+      selectedVerseElement.classList.add('highlighted-verse-modal');
+    }
+  });
+});
+
 }
+
+
+// public function redirectToVerse(verseReference){
+
+// }
 
 // Search bible trigger
 
@@ -258,7 +342,7 @@ function searchBible() {
     return;
   }
 
-  var apiKey = 'f2396f976ec89a6f75d2bbfef77f6bab'; // Replace with your actual API key
+  var apiKey = '0b638994917566feb258ea384320a0ea'; // Replace with your actual API key
   var bibleVersion = 'de4e12af7f28f599-01'; // Replace with the appropriate Bible version ID
 
   fetch(`https://api.scripture.api.bible/v1/bibles/${bibleVersion}/search?query=${searchWords.join(' ')}`, {
@@ -532,7 +616,7 @@ function sendSearchQuery(searchQuery) {
     }
 
     function loadBooks() {
-      var apiKey = 'f2396f976ec89a6f75d2bbfef77f6bab';
+      var apiKey = '0b638994917566feb258ea384320a0ea';
       var apiUrl = 'https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/books';
       var bookSelect = document.getElementById('bookSelect');
       var paginationContainer = document.getElementById('paginationContainer');
@@ -557,9 +641,9 @@ function sendSearchQuery(searchQuery) {
         });
     }
 
-    function loadChapters() {
-      var bookId = document.getElementById('bookSelect').value;
-      var apiKey = 'f2396f976ec89a6f75d2bbfef77f6bab';
+    function loadChapters(crossReferencePassedValueBook) {
+      var bookId = crossReferencePassedValueBook || document.getElementById('bookSelect').value;
+      var apiKey = '0b638994917566feb258ea384320a0ea';
       var apiUrl = `https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/books/${bookId}/chapters`;
       var chapterSelect = document.getElementById('chapterSelect');
 
@@ -584,118 +668,122 @@ function sendSearchQuery(searchQuery) {
           console.error('Error fetching Bible chapters:', error);
         });
     }
-// Call fetchCrossReferenceData() to get the cross-reference data
-fetchCrossReferenceData()
-  .then(crossReferenceData => {
-    // Now that you have the cross-reference data, call the loadVerses() function with the crossReferenceData
-    loadVerses(crossReferenceData);
-  })
-  .catch(error => {
-    console.error('Error fetching cross-reference data:', error);
-  });
+    // Call fetchCrossReferenceData() to get the cross-reference data
+    fetchCrossReferenceData()
+      .then(crossReferenceData => {
+        // Now that you have the cross-reference data, call the loadVerses() function with the crossReferenceData
+        loadVerses(crossReferenceData);
+      })
+      .catch(error => {
+        console.error('Error fetching cross-reference data:', error);
+      });
+      
+function loadVerses(crossReferencePassedValue) {
+  var bookId = document.getElementById('bookSelect').value;
+  var chapterId = crossReferencePassedValue ? crossReferencePassedValue : document.getElementById('chapterSelect').value;
+  var versesList = document.getElementById('versesList');
+  var chapterHeading = document.getElementById('chapterHeading');
+  var chapterText = ''; // Variable to store the chapter text
+    console.log("crossReferencePassedValue:", crossReferencePassedValue)
+  versesList.innerHTML = '';
 
-      function loadVerses() {
-      var bookId = document.getElementById('bookSelect').value;
-      var chapterId = document.getElementById('chapterSelect').value;
-      var versesList = document.getElementById('versesList');
-      var chapterHeading = document.getElementById('chapterHeading');
-      var chapterText = ''; // Variable to store the chapter text
+  if (chapterId !== '') {
+    var apiKey = '0b638994917566feb258ea384320a0ea';
+    var apiUrl = `https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/chapters/${chapterId}/verses`;
+    console.log("CHAPTER ID: ", apiUrl);
+    fetch(apiUrl, {
+      headers: {
+        'api-key': apiKey
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        var verseIds = data.data.map(verse => verse.id);
+        var versePromises = verseIds.map(verseId => {
+          var verseApiUrl = `https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/verses/${verseId}`;
+          return fetch(verseApiUrl, {
+            headers: {
+              'api-key': apiKey
+            }
+          }).then(response => response.json());
+        });
 
-      versesList.innerHTML = '';
-
-      if (chapterId !== '') {
-        var apiKey = 'f2396f976ec89a6f75d2bbfef77f6bab';
-        var apiUrl = `https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/chapters/${chapterId}/verses`;
-
-        fetch(apiUrl, {
-          headers: {
-            'api-key': apiKey
-          }
-        })
-          .then(response => response.json())
-          .then(data => {
-            var verseIds = data.data.map(verse => verse.id);
-            var versePromises = verseIds.map(verseId => {
-              var verseApiUrl = `https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/verses/${verseId}`;
-              return fetch(verseApiUrl, {
-                headers: {
-                  'api-key': apiKey
-                }
-              }).then(response => response.json());
+        Promise.all(versePromises)
+          .then(verses => {
+            verses.sort((a, b) => {
+              var refA = parseInt(a.data.reference.split(' ')[1]);
+              var refB = parseInt(b.data.reference.split(' ')[1]);
+              return refA - refB;
             });
 
-            Promise.all(versePromises)
-              .then(verses => {
-                verses.sort((a, b) => {
-                  var refA = parseInt(a.data.reference.split(' ')[1]);
-                  var refB = parseInt(b.data.reference.split(' ')[1]);
-                  return refA - refB;
+            // Call fetchCrossReferenceData() to get the cross-reference data
+            fetchCrossReferenceData()
+              .then(crossReferenceData => {
+                verses.forEach(verse => {
+                  var verseItem = document.createElement('span');
+                  const reference = verse.data.reference;
+                  const content = verse.data.content.replace(/<\/?p[^>]*>|<\/?span[^>]*>/g, '').replace(/¶/g, '');
+
+                  // Replace numbers with smaller numbers and add a space after each number
+                  const formattedContent = content.replace(/\d+/g, match => `<small>${match}</small> `);
+
+                  verseItem.innerHTML = formattedContent; // Use innerHTML to render the HTML with <small> tags
+                  verseItem.dataset.reference = reference;
+                  chapterText += content + ' '; // Concatenate the verse text
+
+                  var verseIDfromAPI = verse.data.id;
+                  var hasCrossReferenceData = crossReferenceData.some(item => item.verseID === verseIDfromAPI);
+
+                  if (hasCrossReferenceData) {
+                    // If the verse has cross-reference data, add a cross-reference icon to the verse item
+                    var crossRefIcon = document.createElement('i');
+                    crossRefIcon.classList.add('fas', 'fa-book-open', 'crossrefIcon'); // Font Awesome's open book icon class
+                    crossRefIcon.style.cursor = 'pointer';
+                    verseItem.appendChild(crossRefIcon);
+
+                    crossRefIcon.addEventListener('click', function () {
+                      // Handle the cross-reference icon click event
+                      var verseReferenceIDs = crossReferenceData
+                        .filter(item => item.verseID === verseIDfromAPI)
+                        .map(item => item.VerseReferenceID);
+                      showCrossReferenceModal(verseIDfromAPI, verseReferenceIDs);
+                    });
+                  }
+
+                  versesList.appendChild(verseItem);
                 });
 
-                // Call fetchCrossReferenceData() to get the cross-reference data
-                fetchCrossReferenceData()
-                  .then(crossReferenceData => {
-                    verses.forEach(verse => {
-                      var verseItem = document.createElement('span');
-                      const reference = verse.data.reference;
-                      const content = verse.data.content.replace(/<\/?p[^>]*>|<\/?span[^>]*>/g, '');
-                      verseItem.textContent = content;
-                      verseItem.dataset.reference = reference;
-                      chapterText += content + ' '; // Concatenate the verse text
+                // Display header of chapter
+                chapterHeading.textContent = chapterSelect.options[chapterSelect.selectedIndex].textContent;
 
-                      var verseIDfromAPI = verse.data.id;
-                      var hasCrossReferenceData = crossReferenceData.some(item => item.verseID === verseIDfromAPI);
+                // Create the text-to-speech button for the entire chapter
+                var speakBtn = document.createElement('div');
+                speakBtn.classList.add('speak-btn-chapter');
+                speakBtn.innerHTML = "<i class='fas fa-volume-up'></i>";
+                speakBtn.addEventListener('click', function () {
+                  speakText(chapterText);
+                });
 
-                      if (hasCrossReferenceData) {
-                        // If the verse has cross-reference data, add a cross-reference icon to the verse item
-                        var crossRefIcon = document.createElement('i');
-                        crossRefIcon.classList.add('fas', 'fa-book-open', 'crossrefIcon'); // Font Awesome's open book icon class
-                        crossRefIcon.style.cursor = 'pointer';
-                        verseItem.appendChild(crossRefIcon);
+                // Append the speak button to the chapter heading
+                chapterHeading.appendChild(speakBtn);
 
-                        crossRefIcon.addEventListener('click', function () {
-                          // Handle the cross-reference icon click event
-                          var verseReferenceIDs = crossReferenceData
-                            .filter(item => item.verseID === verseIDfromAPI)
-                            .map(item => item.VerseReferenceID);
-                          showCrossReferenceModal(verseIDfromAPI, verseReferenceIDs);
-                        });
-                      }
-
-                      versesList.appendChild(verseItem);
-                    });
-
-                    // Display header of chapter
-                    chapterHeading.textContent = chapterSelect.options[chapterSelect.selectedIndex].textContent;
-
-                    // Create the text-to-speech button for the entire chapter
-                    var speakBtn = document.createElement('div');
-                    speakBtn.classList.add('speak-btn-chapter');
-                    speakBtn.innerHTML = "<i class='fas fa-volume-up'></i>";
-                    speakBtn.addEventListener('click', function () {
-                      speakText(chapterText);
-                    });
-
-                    // Append the speak button to the chapter heading
-                    chapterHeading.appendChild(speakBtn);
-
-                    paginationContainer.style.display = 'flex';
-                  })
-                  .catch(error => {
-                    console.error('Error fetching cross-reference data:', error);
-                  });
+                paginationContainer.style.display = 'flex';
+                console.log("chapter ID verselist", chapterId);
+                console.log("bookID verselist", bookId);
               })
               .catch(error => {
-                console.error('Error fetching Bible verses:', error);
+                console.error('Error fetching cross-reference data:', error);
               });
           })
           .catch(error => {
-            console.error('Error fetching Bible chapters:', error);
+            console.error('Error fetching Bible verses:', error);
           });
-      }
-    }
-
-
+      })
+      .catch(error => {
+        console.error('Error fetching Bible chapters:', error);
+      });
+  }
+}
 
 
     // Load books on page load
@@ -745,15 +833,15 @@ fetchCrossReferenceData()
     });
 
     function loadPreviousChapter() {
-  var chapterSelect = document.getElementById('chapterSelect');
-  var currentIndex = chapterSelect.selectedIndex;
-  
-  // Load the previous chapter if available
-  if (currentIndex > 0) {
-    chapterSelect.selectedIndex = currentIndex - 1;
-    loadVerses();
-  }
-}
+      var chapterSelect = document.getElementById('chapterSelect');
+      var currentIndex = chapterSelect.selectedIndex;
+      
+      // Load the previous chapter if available
+      if (currentIndex > 0) {
+        chapterSelect.selectedIndex = currentIndex - 1;
+        loadVerses();
+      }
+    }
 
 function loadNextChapter() {
   var chapterSelect = document.getElementById('chapterSelect');
