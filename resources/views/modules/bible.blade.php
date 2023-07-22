@@ -264,7 +264,6 @@ function showCrossReferenceModal(verseID, verseReferenceIDs) {
   crossRefLinks.forEach(function (link) {
     link.addEventListener('click', function () {
     var verseReference = link.dataset.verseReference;
-    console.log('Verse Reference:', verseReference); // Add this line to check the value
     var parts = verseReference.split('.'); // Split the verseReference by dots
     var extractedChapter = parts.slice(0, 2).join('.'); // Join the first two parts with a dot
     var extractedBook = parts.slice(0, 1).join('.'); // Join the first part as the book name
@@ -353,7 +352,8 @@ function searchBible() {
     .then(response => response.json())
     .then(data => {
       var verses = data.data.verses;
-
+      console.log('data: ',data);
+      console.log('verses: ',verses);
       // Sort verses based on the number of occurrences of the searched word
       verses.sort((a, b) => {
         var occurrencesA = countOccurrences(a.text.toLowerCase(), searchWords);
@@ -374,6 +374,7 @@ function searchBible() {
               verseItem.classList.add('verse-item');
               verseItem.style.marginBottom = '30px';
               var verseText = verse.text;
+              var verseIDResult = verse.id;
               var highlightedText = highlightSearchQuery(verseText, searchWords);
 
               // Create a button to speak the verse
@@ -385,6 +386,25 @@ function searchBible() {
               });
               verseItem.innerHTML = verse.reference + ' - ' + highlightedText;
               verseItem.appendChild(speakBtn);
+
+              // Redirect The user if lcikced
+              verseItem.addEventListener('click', function () {
+              var verseIDResult = verse.id;
+              var parts = verseIDResult.split('.'); 
+              var extractedBook = parts.slice(0, 1).join('.'); 
+              var extractedChapter = parts.slice(0, 2).join('.'); // Join the first two parts with a dot
+              var extractedVerseID = parts.slice(0, 2).join('.');
+              var chapterSelect = document.getElementById('chapterSelect');
+              chapterSelect.textContent = extractedChapter;   
+
+              document.getElementById('bookSelect').value = extractedBook;
+              loadChapters(extractedBook);
+              loadVerses(extractedVerseID);
+            });
+
+              
+
+
 
               // Create a button to bookmark the verse
               var bookmarkBtn = document.createElement('button');
@@ -411,10 +431,6 @@ function searchBible() {
                 });
 
                 verseItem.appendChild(crossRefIcon);
-                console.log("ga sulod");
-              } else {
-                console.log("wala ga sulod");
-              }
 
               var shareIcons = document.createElement('span');
               shareIcons.classList.add('share-icons');
@@ -424,7 +440,7 @@ function searchBible() {
               verseItem.appendChild(shareIcons);
 
               versesList.appendChild(verseItem);
-            });
+            }});
             chapterHeading.textContent = "Search results for: " + '' + searchWords  + '"';
           })
           .catch(error => {
