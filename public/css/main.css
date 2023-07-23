@@ -66,10 +66,14 @@
 
     main{
     background-image: url('/img/background/VerseGuruBG.png'); 
-    background-size: cover; height: 100%;
+    background-size: cover;
     height: 100%;
     width: 100%;
     }
+    .blur-background {
+      filter: blur(5px); /* You can adjust the blur radius as needed */
+    }
+    
     .main__wrapper{
     display: flex;
     align-items: center;
@@ -295,13 +299,12 @@
   .bible__container h2 {
     text-align: center;
     font-family: 'Playfair Display', serif;
-    font-size: 65px;
+    font-size: 45px;
     color: #343f56;
   }
 
   .select-container {
     text-align: center;
-    margin-bottom: 20px;
   }
 
   .select-container select {
@@ -355,7 +358,7 @@
     padding: 60px;
     min-height: 500px;
     background: #d7d7d7f2;
-    margin: 100px 300px;
+    margin: 100px 400px;
     font-size: 20px;
     border-radius: 10px;
     width: 100%;
@@ -459,8 +462,8 @@
   }
 
 
-  .fbicon{
-    color:#2374e1;
+  .redditicon{
+    color:#f20404;
     font-size: 30px;
   }
   .twittericon{
@@ -468,7 +471,7 @@
     font-size: 30px;
   }
 
-  .fbicon:hover{
+  .redditicon:hover{
     color:black;
   transition: 1s;
   }
@@ -665,6 +668,10 @@ align-items: center;
     transition: 1s;
 }
 
+.resetPass{
+  margin-top: 20px;
+}
+
 
 
 
@@ -683,7 +690,7 @@ align-items: center;
   }
   
   .search-history-container, .bookmarks-container {
-    margin: 10%;
+    margin: 2%;
     width: 70%;
   }
   
@@ -694,13 +701,12 @@ align-items: center;
   .search-history-header, .bookmarks-header {
     margin: 5px 0px;
     margin-top: 50px;
-    margin-right: 40%;
     color: white;
   }
   
   .search-history-header h1, .bookmarks-header h1 {
     font-family: 'Playfair Display', serif !important;
-    font-size: 80px;
+    font-size: 100px;
     margin-bottom: 50px;
   }
   
@@ -754,7 +760,7 @@ align-items: center;
     width: 25%;
     background-color: white;
     border-radius: 10px;
-    margin-right: 42%;
+    margin-left: 45%;
   }
   
   .history-search-body {
@@ -779,6 +785,7 @@ align-items: center;
     font-size: 12px;
     border-radius: 5px;
     margin-right: 10px;
+    
   }
   
   .search-history-delete-all:hover, .bookmarks-delete-all:hover {
@@ -788,7 +795,6 @@ align-items: center;
     border-color: black;
     transition: 1s;
   }
-
 
 
 

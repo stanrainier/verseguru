@@ -51,7 +51,7 @@
                             </div>
 
                             <div class="profile-edit">
-                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password" placeholder="Password">        
+                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password" placeholder="Input your password here to save changes">        
                             <span class="passwordvisibility" onclick="togglePasswordVisibility()">
                              <i id="togglePasswordIcon" class="fa fa-eye-slash"></i>
                             </span>
@@ -63,8 +63,9 @@
                             @enderror
                                 <button type="submit">Save</button>
                             </div>
-                            <a href="{{ route('password.request') }}">Reset Password</a>
-
+                            <div class="resetPass">
+                                <a href="{{ route('password.request') }}">Reset Password</a>
+                            </div>
                         </form>
                     </div>
                 </div>

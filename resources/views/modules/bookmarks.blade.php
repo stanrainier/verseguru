@@ -7,7 +7,7 @@
     flex-direction: column;
 }
 .bookmarks-container{
-    margin: 10%;
+    margin: 2% !important;
     width: 70%;
 }
 .bookmarks-header{
@@ -28,6 +28,19 @@
 .bookmarks-results{
     overflow-y: scroll;
     height: 535px;
+    display: flex;
+    flex-direction: column;
+}
+.bookmarks-search-card{
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-left: 50%;
+  }
+.bookmarks-delete-all-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
 }
 </style>
 @section('content')
@@ -63,9 +76,9 @@
                 @else
                     @foreach ($bookmarks as $bookmark)
                     <div class="bookmark-result">
-                        <span onclick="redirectToBible('{{ $bookmark->reference }}')"><b>{{ $bookmark->verse }}</b></span>
+                        <span><b>{{ $bookmark->verse }}</b></span>
                         <br><br>
-                        <span class="bookmark-time">{{ $bookmark->verse_text }}</span>
+                        <span class="bookmark-text">{{ $bookmark->verse_text }}</span>
                         <button class="bookmark-delete-entry" onclick="deleteBookmark('{{ $bookmark->id }}')">
                             <i class="fa-solid fa-x"></i>
                         </button>
@@ -79,8 +92,8 @@
         </div>
     </div>
 </div>
-<script>
 
+<script>
 function deleteBookmark(id) {
         if (confirm('Are you sure you want to delete this bookmark?')) {
             fetch(`/bookmarks/delete/${id}`, {
@@ -125,19 +138,48 @@ function deleteBookmark(id) {
 
 
 
-function redirectToBible(reference) {
-    // Redirect to the Bible page with the bookmarked reference
-    window.location.href = `/bible?search=${encodeURIComponent(reference)}`;
+// function redirectToBible(selectedBookmark) {
+//     var valueofClick = self.value;
+//     console.log('valueofClick: 'valueofClick);
+// //   window.location.href = `/bible?search=${encodeURIComponent(selectedBookmark)}`;
+// }
+
+function handleBookmarkResultClick(event) {
+  var bookmarkContent = event.currentTarget.querySelector('b').textContent;
+  var parts = bookmarkContent.split('.');
+  var extractedChapter = parts.slice(0, 2).join('.');
+  window.location.href = `/bible?chapter=${encodeURIComponent(extractedChapter)}`;
 }
 
-document.querySelector('.button-smartsearch').addEventListener('click', function() {
+// Get all the bookmark result elements
+var bookmarkResults = document.querySelectorAll('.bookmark-result');
+
+// Add click event listener to each bookmark result element
+bookmarkResults.forEach(result => {
+  result.addEventListener('click', handleBookmarkResultClick);
+});
+
+
+const urlParams = new URLSearchParams(window.location.search);
+const searchQuery = urlParams.get('search');
+
+if (searchQuery) {
+  // Set the search query in the search input field
+  document.getElementById('searchInput').value = decodeURIComponent(searchQuery);
+
+  // Call the searchBible() function to perform the search
+  searchBible();
+}
+
+
+document.querySelector('#bookmarksSearch').addEventListener('input', function() {
     var searchQuery = document.getElementById('bookmarksSearch').value.toLowerCase();
     var bookmarkResults = document.querySelectorAll('.bookmark-result');
 
     var hasBookmarkResults = false; // Flag to track if there are any bookmark results
 
     bookmarkResults.forEach(result => {
-        var resultText = result.querySelector('b').textContent.toLowerCase();
+        var resultText = result.querySelector('span').textContent.toLowerCase();
         if (resultText.includes(searchQuery)) {
             result.style.display = 'block';
             hasBookmarkResults = true; // Set the flag to true if a bookmark result is found
