@@ -175,7 +175,7 @@
                                         <span><a href="{{ route('aboutus') }}">ABOUT US</a></span>
                                     </div>
                                     <div class="row mt-4">
-                                        <span><a>BOOKMARKS</a></span>
+                                        <span><a href="/bookmarks">BOOKMARKS</a></span>
                                     </div>
                                 </div>
                             </div>
@@ -187,9 +187,9 @@
                             <div class="footer__icons">
                                 <i class="fa-sharp fa-regular fa-envelope"></i>
                             </div>
-                            <div class="footer__icons">
+                            <!-- <div class="footer__icons">
                                 <i class="fa-brands fa-facebook"></i>
-                            </div>
+                            </div> -->
                             <div class="footer__icons">
                                 <i class="fa-brands fa-twitter"></i>
                             </div>
@@ -203,5 +203,17 @@
     </div>
     </footer>
 </body>
+<script>
+      function disableAutocomplete() {
+    const inputElements = document.getElementsByTagName('input');
+    for (let i = 0; i < inputElements.length; i++) {
+      inputElements[i].setAttribute('autocomplete', 'off');
+    }
+  }
+
+  // Call the function to disable autocomplete on page load
+  disableAutocomplete();
+
+    </script>
 </html>
 

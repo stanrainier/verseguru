@@ -46,6 +46,10 @@ Route::middleware(['verified'])->group(function () {
 // guest 
 
 
+Route::middleware(['guest'])->get('/bookmarks', function () {
+    return redirect()->route('login');
+})->name('bookmarks');
+
 Route::get('/logout', function () {
     return route('logout');
 });

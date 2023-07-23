@@ -19,3 +19,4 @@ document.addEventListener("DOMContentLoaded", function() {
     var togglePasswordElement = document.querySelector(".passwordvisibility");
     togglePasswordElement.addEventListener("click", togglePasswordVisibility);
 });
+

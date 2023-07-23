@@ -54,4 +54,13 @@ class LoginController extends Controller
         return redirect()->intended($this->redirectPath());
     }
     
+    protected function username()
+    {
+        $login = request()->input('email');
+        $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        request()->merge([$fieldType => $login]);
+
+        return $fieldType;
+    }
+
 }
