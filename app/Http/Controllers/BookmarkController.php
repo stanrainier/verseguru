@@ -32,6 +32,7 @@ class BookmarkController extends Controller
     public function deleteAll()
     {
         $userId = Auth::id();
+        Log::info('Delete All Bookmarks called by user ID: ' . $userId);
         Bookmark::where('user_id', $userId)->delete();
 
         return response()->json(['message' => 'All search history deleted']);
@@ -128,6 +129,8 @@ class BookmarkController extends Controller
             ]);
         }
     }
+
+    
 
     
 

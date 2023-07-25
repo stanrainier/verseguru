@@ -60,43 +60,49 @@
 
 function deleteSearchHistory(id) {
     if (confirm('Are you sure you want to delete this entry?')) {
-        fetch(`/search-history/delete/${id}`, {
+        const csrfToken = '{{ csrf_token() }}';
+        const deleteOptions = {
             method: 'DELETE',
             headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'X-CSRF-TOKEN': csrfToken,
             },
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data.message);
-            // Remove the deleted search history entry from the DOM
-            document.getElementById('searchResult_' + id).remove();
-        })
-        .catch(error => {
-            console.error('Error deleting search history:', error);
-        });
+        };
+        const deleteUrls = [`/search-history/delete/${id}`, `/smartsearch-history/delete/${id}`];
+
+        Promise.all(deleteUrls.map(url => fetch(url, deleteOptions)))
+            .then(responses => Promise.all(responses.map(response => response.json())))
+            .then(dataArray => {
+                document.getElementById('searchResult_' + id).remove();
+            })
+            .catch(error => {
+                console.error('Error deleting search history:', error);
+            });
     }
 }
 
+
 function deleteAllSearchHistory() {
     if (confirm('Are you sure you want to delete all search history?')) {
-        fetch('/search-history/delete-all', {
+        const csrfToken = '{{ csrf_token() }}';
+        const deleteOptions = {
             method: 'DELETE',
             headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'X-CSRF-TOKEN': csrfToken,
             },
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data.message);
-            // Remove all search history entries from the DOM
-            document.querySelectorAll('.search-result').forEach(element => element.remove());
-        })
-        .catch(error => {
-            console.error('Error deleting search history:', error);
-        });
+        };
+        const deleteUrls = ['/search-history/delete-all', '/smartsearch-history/delete-all'];
+
+        Promise.all(deleteUrls.map(url => fetch(url, deleteOptions)))
+            .then(responses => Promise.all(responses.map(response => response.json())))
+            .then(dataArray => {
+                document.querySelectorAll('.search-result').forEach(element => element.remove());
+            })
+            .catch(error => {
+                console.error('Error deleting search history:', error);
+            });
     }
 }
+
     function redirectToBible(searchQuery) {
   // Redirect to the Bible page with the search query parameter
   window.location.href = `/bible?search=${encodeURIComponent(searchQuery)}`;

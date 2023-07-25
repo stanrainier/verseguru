@@ -721,7 +721,11 @@ align-items: center;
     justify-content: space-between;
     background: white;
   }
-  
+  .search-result:hover, .bookmark-result:hover{
+    cursor:pointer;
+    background: #f1eaea;
+    transition: 1s;
+  } 
   .search-history-results, .bookmarks-results {
     overflow-y: scroll;
     height: 535px;
@@ -737,14 +741,23 @@ align-items: center;
     font-weight: bold;
   }
   
-  .search-history-delete-entry, .bookmark-delete-entry {
+  .search-history-delete-entry{
     padding: 0px;
     border-width: thin;
     border-radius: 5px;
     width: 35px;
     height: 35px;
+
   }
-  
+  .bookmark-delete-entry {
+    padding: 0px;
+    border-width: thin;
+    border-radius: 5px;
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    right: 75px;
+  }
   .search-history-delete-entry:hover, .bookmark-delete-entry:hover {
     background: red;
     transition: 1s;

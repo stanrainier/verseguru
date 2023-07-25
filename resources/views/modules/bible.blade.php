@@ -13,7 +13,7 @@
       padding: 0 !important;
     }
     .bookmark-btn.bookmarked {
-      color: green; 
+      color: orange; 
     }
 
 
@@ -192,6 +192,12 @@ small {
   <script>
 
 // CROSS REFERENCE
+loadBooks();
+loadChapters('GEN.1')
+loadVerses('GEN.1');
+chapterHeading.textContent = "Genesis 1";
+chapterSelect = document.getElementById('chapterSelect');
+chapterSelect.value = ''
 
 function fetchCrossReferenceData() {
   return fetch('/resources/datasets/crossReferenceDataSet.json')
@@ -348,7 +354,7 @@ function searchBible() {
     return;
   }
 
-  var apiKey = '66fae6f1fe196c3f5dd8b00f4d3df5c2'; // Replace with your actual API key
+  var apiKey = '92da7aa5ff3177f4ed12d82a1e670bdb'; // Replace with your actual API key
   var bibleVersion = 'de4e12af7f28f599-01'; // Replace with the appropriate Bible version ID
 
   fetch(`https://api.scripture.api.bible/v1/bibles/${bibleVersion}/search?query=${searchWords.join(' ')}`, {
@@ -541,14 +547,12 @@ function sendSearchQuery(searchQuery) {
           console.log('Bookmark added:', data.message);
 
           // Update the button text and style
-          bookmarkBtn.textContent = 'Remove Bookmark';
           bookmarkBtn.classList.add('bookmarked');
         } else if (data.status === 'removed') {
           // Bookmark was removed
           console.log('Bookmark removed:', data.message);
 
           // Update the button text and style
-          bookmarkBtn.textContent = 'Add Bookmark';
           bookmarkBtn.classList.remove('bookmarked');
         } else {
           // Handle other cases or errors
@@ -592,7 +596,7 @@ function sendSearchQuery(searchQuery) {
     }
 
     function loadBooks() {
-      var apiKey = '66fae6f1fe196c3f5dd8b00f4d3df5c2';
+      var apiKey = '92da7aa5ff3177f4ed12d82a1e670bdb';
       var apiUrl = 'https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/books';
       var bookSelect = document.getElementById('bookSelect');
       var paginationContainer = document.getElementById('paginationContainer');
@@ -619,7 +623,7 @@ function sendSearchQuery(searchQuery) {
 
     function loadChapters(crossReferencePassedValueBook) {
       var bookId = crossReferencePassedValueBook || document.getElementById('bookSelect').value;
-      var apiKey = '66fae6f1fe196c3f5dd8b00f4d3df5c2';
+      var apiKey = '92da7aa5ff3177f4ed12d82a1e670bdb';
       var apiUrl = `https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/books/${bookId}/chapters`;
       var chapterSelect = document.getElementById('chapterSelect');
 
@@ -664,7 +668,7 @@ function loadVerses(crossReferencePassedValue) {
   versesList.innerHTML = '';
 
   if (chapterId !== '') {
-    var apiKey = '66fae6f1fe196c3f5dd8b00f4d3df5c2';
+    var apiKey = '92da7aa5ff3177f4ed12d82a1e670bdb';
     var apiUrl = `https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/chapters/${chapterId}/verses`;
     fetch(apiUrl, {
       headers: {
@@ -696,7 +700,7 @@ function loadVerses(crossReferencePassedValue) {
             fetchCrossReferenceData()
               .then(crossReferenceData => {
                 verses.forEach(verse => {
-                  var verseItem = document.createElement('span');
+                  var verseItem = document.createElement('ul');
                   const reference = verse.data.reference;
                   const content = verse.data.content.replace(/<\/?p[^>]*>|<\/?span[^>]*>/g, '').replace(/¶/g, '');
 
@@ -746,6 +750,14 @@ function loadVerses(crossReferencePassedValue) {
                 speakBtn.innerHTML = "<i class='fas fa-volume-up'></i>";
                 speakBtn.addEventListener('click', function () {
                   speakText(chapterText);
+                speakBtn.addEventListener('dblclick', function () {
+                  if (isSpeaking || isPaused) {
+                    // If speaking or paused, stop the speech and reset flags
+                    window.speechSynthesis.cancel();
+                    isSpeaking = false;
+                    isPaused = false;
+                  }
+                });
                 });
 
                 // Append the speak button to the chapter heading
@@ -778,9 +790,6 @@ function loadVerses(crossReferencePassedValue) {
   }
 }
 
-
-    // Load books on page load
-    loadBooks();
 
 
 
@@ -849,15 +858,27 @@ function loadNextChapter() {
 
 // speech to text 
 // Text-to-speech function
+let isSpeaking = false;
+let isPaused = false;  
+let currentSpeech = null; 
+
 function speakText(text) {
   if ('speechSynthesis' in window) {
-    var message = new SpeechSynthesisUtterance();
-    message.text = text;
-    window.speechSynthesis.speak(message);
+    if (isSpeaking || isPaused) {
+      window.speechSynthesis.cancel();
+      isSpeaking = false;
+      isPaused = false;
+    }
+
+    currentSpeech = new SpeechSynthesisUtterance();
+    currentSpeech.text = text;
+    window.speechSynthesis.speak(currentSpeech);
+    isSpeaking = true;
   } else {
     console.log('Speech synthesis is not supported.');
   }
 }
+
 
 // Modify the startSpeechToText() function to include text-to-speech
 function startSpeechToText() {

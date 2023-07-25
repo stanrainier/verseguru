@@ -153,14 +153,13 @@ Route::post('/profile/authenticate', [ProfileController::class, 'authenticate'])
 // BOOKMARK 
 // Routes that do not require authentication
 Route::get('/bookmarks', [BookmarkController::class, 'index'])->name('bookmarks.index');
-Route::delete('/bookmarks/{id}', [BookmarkController::class, 'destroy'])->name('bookmarks.destroy');
-Route::delete('/bookmarks', [BookmarkController::class, 'deleteAll'])->name('bookmarks.deleteAll');
+Route::delete('/bookmarks/delete/{id}', [BookmarkController::class, 'deleteSingle']);
+Route::delete('/bookmarks/delete-all', [BookmarkController::class, 'deleteAll'])->name('bookmarks.deleteAll');
 Route::post('/bookmarks/toggle', [BookmarkController::class, 'toggleBookmark'])->name('toggleBookmark');
 Route::post('/addBookmark', [BookmarkController::class, 'addBookmark'])->name('addBookmark');
 
 
-Route::delete('/bookmarks/delete/{id}', [BookmarkController::class, 'deleteSingle']);
-Route::delete('/bookmarks/delete-all', [BookmarkController::class, 'deleteAll'])->name('bookmarks.deleteAll');
+
 // Routes that require authentication
 Route::middleware('auth')->group(function () {
     Route::post('/bookmarks/add', [BookmarkController::class, 'addBookmark']);

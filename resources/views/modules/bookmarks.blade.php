@@ -42,6 +42,11 @@
     flex-direction: row;
     justify-content: flex-end;
 }
+.bookmark-result:hover{
+    cursor:pointer;
+    background: #f1eaea;
+    transition: 1s;
+}
 </style>
 @section('content')
 
@@ -74,18 +79,17 @@
                         <p>No bookmarks added yet.</p>
                     </div>
                 @else
-                    @foreach ($bookmarks as $bookmark)
-                    <div class="bookmark-result">
-                        <span><b>{{ $bookmark->verse }}</b></span>
-                        <br><br>
-                        <span class="bookmark-text">{{ $bookmark->verse_text }}</span>
-                        <button class="bookmark-delete-entry" onclick="deleteBookmark('{{ $bookmark->id }}')">
-                            <i class="fa-solid fa-x"></i>
-                        </button>
-                        <div>
-                            
+                    <?php $sortedBookmarks = $bookmarks->sortByDesc('id'); ?>
+                    @foreach ($sortedBookmarks as $bookmark)
+                        <div class="bookmark-result">
+                            <span><b>{{ $bookmark->verse }}</b></span>
+                            <span class="bookmark-text">{{ $bookmark->verse_text }}</span>
+                            <button class="bookmark-delete-entry" onclick="deleteBookmark('{{ $bookmark->id }}')">
+                                <i class="fa-solid fa-x"></i>
+                            </button>
+                            <div>
+                            </div>
                         </div>
-                    </div>
                     @endforeach
                 @endif
             </div>
@@ -95,24 +99,26 @@
 
 <script>
 function deleteBookmark(id) {
-        if (confirm('Are you sure you want to delete this bookmark?')) {
-            fetch(`/bookmarks/delete/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data.message);
-                // Remove the deleted bookmark from the DOM
-                document.getElementById('bookmarkResult_' + id).remove();
-            })
-            .catch(error => {
-                console.error('Error deleting bookmark:', error);
-            });
-        }
+    if (confirm('Are you sure you want to delete this bookmark?')) {
+        fetch(`/bookmarks/delete/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('bookmarkResult_' + id).remove();
+        })
+        .then(() => {
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Error deleting bookmark:', error);
+        });
     }
+}
+
     
     function deleteAllBookmarks() {
     if (confirm('Are you sure you want to delete all bookmarks?')) {
@@ -127,6 +133,7 @@ function deleteBookmark(id) {
             console.log(data.message);
             // Remove all bookmarks from the DOM
             document.querySelectorAll('.bookmark-result').forEach(element => element.remove());
+            
         })
         .catch(error => {
             console.error('Error deleting bookmarks:', error);
@@ -156,7 +163,7 @@ var bookmarkResults = document.querySelectorAll('.bookmark-result');
 
 // Add click event listener to each bookmark result element
 bookmarkResults.forEach(result => {
-  result.addEventListener('click', handleBookmarkResultClick);
+  result.addEventListener('dblclick', handleBookmarkResultClick);
 });
 
 
