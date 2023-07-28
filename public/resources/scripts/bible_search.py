@@ -5,7 +5,7 @@ import torch
 
 def search_bible_api(query, limit=10):
     bible_api_url = "https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/search"
-    api_key = "9b24277b494bee48f28523da7b96a025"
+    api_key = "92da7aa5ff3177f4ed12d82a1e670bdb"
 
     params = {
         "query": query,
@@ -90,6 +90,8 @@ if __name__ == "__main__":
             all_verses.extend(verses)
 
     if all_verses:
+        output_array = []
+        output_splitted = []
         # Keyword-based searching using the NLP model
         relevant_verses = get_relevant_verses(user_query, all_verses)
 
@@ -102,8 +104,13 @@ if __name__ == "__main__":
                 verse = result["verse"]
                 start_score = result["score"]
                 relevance_percentage = (start_score / max_start_score) * 100
-                print(f"{verse['reference']}: {verse['text']} (Relevance: {relevance_percentage:.2f}%)")
+                # output_array.append(
+                #     f"{verse['reference']}: {verse['text']} (Relevance: {relevance_percentage:.2f}%)"
+                # )
+                print(f"{verse['reference']}: {verse['text']} \n (Relevance: {relevance_percentage:.2f}%) \n")
         else:
             print(f"The phrase '{user_query}' does not appear in any Bible verse.")
     else:
         print(f"No results found for the phrase '{user_query}'.")
+
+    # print(f"{output_array}")

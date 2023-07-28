@@ -152,10 +152,10 @@ function deleteBookmark(id) {
 // }
 
 function handleBookmarkResultClick(event) {
-  var bookmarkContent = event.currentTarget.querySelector('b').textContent;
+  var bookmarkContent = event.currentTarget.querySelector('strong').textContent;
   var parts = bookmarkContent.split('.');
   var extractedChapter = parts.slice(0, 2).join('.');
-  window.location.href = `/bible?chapter=${encodeURIComponent(extractedChapter)}`;
+  window.location.href = `/bible?chapter=${encodeURIComponent(bookmarkContent)}`;
 }
 
 // Get all the bookmark result elements

@@ -46,6 +46,7 @@
                 <pre style="font-family: 'Montserrat', sans-serif;
                 font-size: 15px;">{!! $output !!}
                 </pre>
+                <!-- <div>{!! $output !!}</div> -->
             </div>
             @endif
             </div>

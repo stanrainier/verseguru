@@ -38,7 +38,7 @@
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
+  width: 50%;
 }
 
 /* Close button style */
@@ -119,11 +119,24 @@ small {
   .crossRefLink{
     cursor:pointer;
   }
+  .crossRefLink:hover{
+    background: #ff9900c7;
+    transition: 1s;
+    font-weight: bolder;
+  }
   .highlighted-verse {
-  background-color: yellow;
+  background-color: #ff6a008a;
   color: black;
+  font-weight: bolder;
 }
-
+.crossRefContent p{
+  text-align: center;
+  font-size: 20px;
+}
+.cross-ref-title{
+  font-size: 30px !important;
+  font-weight: bolder;
+}
   </style>
 </head>
 
@@ -180,7 +193,7 @@ small {
   <div class="modal-content">
     <span class="close">&times;</span>
     <div class="crossRefContent">
-      <p id="crossrefTitle"></p>
+      <p id="crossrefTitle" class="cross-ref-title"></p>
       <div class="crossRefResults">
         <p id="modalVerseReference"></p>
       </div>
@@ -273,30 +286,21 @@ function showCrossReferenceModal(verseID, verseReferenceIDs) {
   crossRefLinks.forEach(function (link) {
     link.addEventListener('click', function () {
     var verseReference = link.dataset.verseReference;
+    var verseReference2 = link.dataset;
     var parts = verseReference.split('.'); // Split the verseReference by dots
     var extractedChapter = parts.slice(0, 2).join('.'); // Join the first two parts with a dot
     var extractedBook = parts.slice(0, 1).join('.'); // Join the first part as the book name
     var extractedVerse = parts[2]; 
 
-
     loadChapters(extractedBook);
-    loadVerses(extractedChapter); // Pass extractedChapter as an argument
+    loadVerses(extractedChapter, verseReference); // Pass extractedChapter as an argument
+
     
     var chapterHeading = document.getElementById('chapterHeading');
     chapterHeading.textContent = verseReference;
 
     modal.style.display = 'none'; // Close modal
 
-    // Scroll to the selected verse within the modal
-    var selectedVerseElement = document.getElementById('verseList').value = extractedChapter;
-    if (selectedVerseElement) {
-      selectedVerseElement.scrollIntoView({
-        behavior: 'smooth', // Scroll with smooth animation
-        block: 'center', // Center the verse in the viewport
-      });
-      // Highlight the selected verse by adding a CSS class
-      selectedVerseElement.classList.add('highlighted-verse-modal');
-    }
   });
 });
 
@@ -332,9 +336,11 @@ if (chapterParam) {
   // Use the chapterParam as the argument for the loadVerses function
   var parts = chapterParam.split('.');
   var extractedBook = parts[0];
+  console.log("extractedBook", extractedBook);
+  var extractedChapter = parts.slice(0, 2).join('.');;
   var bookSelect = document.getElementById('bookSelect');
   loadChapters(extractedBook);
-  loadVerses(chapterParam);
+  loadVerses(extractedChapter, chapterParam );
 
 
 
@@ -423,6 +429,8 @@ function searchBible() {
 
               // Check if the current verse has cross-reference data
               var verseID = verse.id;
+              var verseReference = verse.reference;
+              var verseText = verse.text;
               if (crossReferenceData.some(item => item.verseID === verseID)) {
                 // If the verse has cross-reference data, add a cross-reference icon to the verse item
                 var crossRefIcon = document.createElement('i');
@@ -433,10 +441,12 @@ function searchBible() {
                 crossRefIcon.addEventListener('click', function () {
                   // Handle the cross-reference icon click event
                   var verseReferenceIDs = crossReferenceData.filter(item => item.verseID === verseID).map(item => item.VerseReferenceID);
-                  showCrossReferenceModal(verseID, verseReferenceIDs);
+                  showCrossReferenceModal(verseReference, verseReferenceIDs);
+                  // showCrossReferenceModal(verseReference, verseReferenceIDs, verseText, verseReference);
                 });
 
                 verseItem.appendChild(crossRefIcon);
+                
 
               var shareIcons = document.createElement('span');
               shareIcons.classList.add('share-icons');
@@ -657,7 +667,7 @@ function sendSearchQuery(searchQuery) {
         console.error('Error fetching cross-reference data:', error);
       });
       
-function loadVerses(crossReferencePassedValue) {
+function loadVerses(crossReferencePassedValue, crossReferencePassedValueReference) {
   var bookId = document.getElementById('bookSelect').value;
   var chapterId = crossReferencePassedValue ? crossReferencePassedValue : document.getElementById('chapterSelect').value;
   var versesList = document.getElementById('versesList');
@@ -665,6 +675,8 @@ function loadVerses(crossReferencePassedValue) {
   var chapterText = ''; // Variable to store the chapter text
   var chapterSelect = document.getElementById('chapterSelect');
   versesList.innerHTML = '';
+
+
 
   if (chapterId !== '') {
     var apiKey = '92da7aa5ff3177f4ed12d82a1e670bdb';
@@ -701,6 +713,7 @@ function loadVerses(crossReferencePassedValue) {
                 verses.forEach(verse => {
                   var verseItem = document.createElement('span');
                   const reference = verse.data.reference;
+                  const verseID = verse.data.id;
                   const content = verse.data.content.replace(/<\/?p[^>]*>|<\/?span[^>]*>/g, '').replace(/¶/g, '');
 
                   // Replace numbers with smaller numbers and add a space after each number
@@ -708,6 +721,7 @@ function loadVerses(crossReferencePassedValue) {
 
                   verseItem.innerHTML = formattedContent; // Use innerHTML to render the HTML with <small> tags
                   verseItem.dataset.reference = reference;
+                  verseItem.dataset.id = verseID;
                   chapterText += content + ' '; // Concatenate the verse text
 
                   var verseIDfromAPI = verse.data.id;
@@ -738,6 +752,26 @@ function loadVerses(crossReferencePassedValue) {
                   chapterSelect.value = crossReferencePassedValue;
                 } else {
                   chapterSelect.value = chapterSelect.value;
+                }
+
+                // SCROLL TO VERSE 
+                if(!crossReferencePassedValueReference){
+                  console.log("None");
+                  console.log(crossReferencePassedValueReference);
+                }else{
+                  var elementsWithIdAttribute = document.querySelectorAll(`[data-id="${crossReferencePassedValueReference}"]`);
+                  console.log("There is");
+                  console.log("elementsWithIdAttribute:", elementsWithIdAttribute);
+                  elementsWithIdAttribute.forEach(element => {
+                    element.classList.add("highlighted-verse");
+                  });
+                  if (elementsWithIdAttribute.length > 0) {
+                  const elementToScroll = elementsWithIdAttribute[0];
+                  const rect = elementToScroll.getBoundingClientRect();
+                  const offsetTop = rect.top + window.pageYOffset;
+                  const middleOfScreen = offsetTop - window.innerHeight / 2;
+                  window.scrollTo({ top: middleOfScreen, behavior: "smooth" });
+                }
                 }
 
 
