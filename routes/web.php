@@ -10,6 +10,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\smartSearch;
+
 
 Route::middleware(['guest'])->group(function () {
     Route::get('/', function () {
@@ -167,9 +169,11 @@ Route::middleware('auth')->group(function () {
     
 });
 
-// Other routes
-// Place your other routes here
 
+
+// Smart Search 
+
+Route::post('/search-bible', [smartSearch::class, 'index'])->name('search.bible');
 
 
 

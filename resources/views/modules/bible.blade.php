@@ -39,7 +39,6 @@
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
-  max-width: 400px;
 }
 
 /* Close button style */
@@ -700,7 +699,7 @@ function loadVerses(crossReferencePassedValue) {
             fetchCrossReferenceData()
               .then(crossReferenceData => {
                 verses.forEach(verse => {
-                  var verseItem = document.createElement('ul');
+                  var verseItem = document.createElement('span');
                   const reference = verse.data.reference;
                   const content = verse.data.content.replace(/<\/?p[^>]*>|<\/?span[^>]*>/g, '').replace(/¶/g, '');
 

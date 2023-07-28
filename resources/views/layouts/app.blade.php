@@ -88,7 +88,7 @@
                         @else
                             @if (auth()->check() && auth()->user()->hasVerifiedEmail())
                                 <div class="navbar__item m-3">
-                                    <a href="/home" class="formatlink"><span> HOME </span></a>
+                                    <a href="/" class="formatlink"><span> HOME </span></a>
                                 </div>
                                 <div class="navbar__item m-3">
                                     <a href="/bible" class="formatlink"><span> BIBLE </span></a>
@@ -104,12 +104,10 @@
                                         <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}" alt="{{ Auth::user()->name }}" class="pfp" >
                                         {{ Auth::user()->name }}
                                     </a>
-
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('profile') }}">{{ __('My Profile') }}</a>
                                     <a class="dropdown-item" href="/bookmarks">{{ __('Bookmarks') }}</a>
                                         <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
-
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                             @csrf
                                         </form>

@@ -82,8 +82,8 @@
                     <?php $sortedBookmarks = $bookmarks->sortByDesc('id'); ?>
                     @foreach ($sortedBookmarks as $bookmark)
                         <div class="bookmark-result">
-                            <span><b>{{ $bookmark->verse }}</b></span>
-                            <span class="bookmark-text">{{ $bookmark->verse_text }}</span>
+                            <span><strong>{{ $bookmark->verse }}</strong></span>
+                            <span >{{ $bookmark->verse_text }}</span>
                             <button class="bookmark-delete-entry" onclick="deleteBookmark('{{ $bookmark->id }}')">
                                 <i class="fa-solid fa-x"></i>
                             </button>

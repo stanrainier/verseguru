@@ -67,7 +67,7 @@
     main{
     background-image: url('/img/background/VerseGuruBG.png'); 
     background-size: cover;
-    height: 100%;
+    /* height: 100%; */
     width: 100%;
     }
     .blur-background {
