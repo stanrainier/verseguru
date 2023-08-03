@@ -2,9 +2,7 @@
 
 @section('content')
 <div class="search-history-main">
-    <div class="search-history-header">
-        <h1>Search History</h1>
-    </div>
+    <div class="spacer_bible"></div>
     <div class="history-search-card">
         <div class="history-search-body col d-flex align-items-center">
             <div class="input-group">

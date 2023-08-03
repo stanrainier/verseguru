@@ -5,7 +5,7 @@ import torch
 
 def search_bible_api(query, limit=10):
     bible_api_url = "https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/search"
-    api_key = "92da7aa5ff3177f4ed12d82a1e670bdb"
+    api_key = "0b638994917566feb258ea384320a0ea"
 
     params = {
         "query": query,

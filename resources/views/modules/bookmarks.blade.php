@@ -51,9 +51,7 @@
 @section('content')
 
 <div class="bookmarks-main">
-    <div class="bookmarks-header">
-        <h1>Bookmarks</h1>
-    </div>
+<div class="spacer_bible"></div>
     <div class="bookmarks-search-card">
         <div class="bookmarks-search-body col d-flex align-items-center">
             <div class="input-group">

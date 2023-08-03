@@ -78,7 +78,7 @@
 }
 .crossrefIcon{
   margin-right: 5px !important;
-  color: black;
+  color: #343f56;
 
 }
 .crossrefIcon:hover{
@@ -98,13 +98,12 @@
   border-color:#ff000000;
 }
 .select-container{
-    display: flex;
+  display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
-    background: #ffffff54;
-    padding: 20px;
-    margin: 0 2%;
+    padding: 0px;
+    margin: 0px 10%;
     border-radius: 30px;
 }
 .select-section{
@@ -137,12 +136,38 @@ small {
   font-size: 30px !important;
   font-weight: bolder;
 }
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+.search-container-bible{
+
+}
   </style>
 </head>
 
 
 <div class="bible__container">
-  <h1>Bible Page</h1>
+  <div class="spacer_bible"></div>
   <div class="select-container">
       <select id="bookSelect" onchange="loadChapters()">
         <option value="">Select Book</option>
@@ -152,7 +177,7 @@ small {
       </select>
     <!-- <div class="select-section">
     </div> -->
-<div class="select-container">
+<div class="search-container-bible">
       <div class="bible-search-card">
         <form id="searchForm">
         @csrf
@@ -169,10 +194,6 @@ small {
         </form>
       </div>
   </div>
-
-
-
-  
  
   <div class="output__container">
     <div class="output-container">
@@ -359,7 +380,7 @@ function searchBible() {
     return;
   }
 
-  var apiKey = '92da7aa5ff3177f4ed12d82a1e670bdb'; // Replace with your actual API key
+  var apiKey = '0b638994917566feb258ea384320a0ea	'; // Replace with your actual API key
   var bibleVersion = 'de4e12af7f28f599-01'; // Replace with the appropriate Bible version ID
 
   fetch(`https://api.scripture.api.bible/v1/bibles/${bibleVersion}/search?query=${searchWords.join(' ')}`, {
@@ -605,7 +626,7 @@ function sendSearchQuery(searchQuery) {
     }
 
     function loadBooks() {
-      var apiKey = '92da7aa5ff3177f4ed12d82a1e670bdb';
+      var apiKey = '0b638994917566feb258ea384320a0ea	';
       var apiUrl = 'https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/books';
       var bookSelect = document.getElementById('bookSelect');
       var paginationContainer = document.getElementById('paginationContainer');
@@ -632,7 +653,7 @@ function sendSearchQuery(searchQuery) {
 
     function loadChapters(crossReferencePassedValueBook) {
       var bookId = crossReferencePassedValueBook || document.getElementById('bookSelect').value;
-      var apiKey = '92da7aa5ff3177f4ed12d82a1e670bdb';
+      var apiKey = '0b638994917566feb258ea384320a0ea	';
       var apiUrl = `https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/books/${bookId}/chapters`;
       var chapterSelect = document.getElementById('chapterSelect');
 
@@ -679,7 +700,7 @@ function loadVerses(crossReferencePassedValue, crossReferencePassedValueReferenc
 
 
   if (chapterId !== '') {
-    var apiKey = '92da7aa5ff3177f4ed12d82a1e670bdb';
+    var apiKey = '0b638994917566feb258ea384320a0ea	';
     var apiUrl = `https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/chapters/${chapterId}/verses`;
     fetch(apiUrl, {
       headers: {
@@ -711,10 +732,10 @@ function loadVerses(crossReferencePassedValue, crossReferencePassedValueReferenc
             fetchCrossReferenceData()
               .then(crossReferenceData => {
                 verses.forEach(verse => {
-                  var verseItem = document.createElement('span');
+                  var verseItem = document.createElement('ul');
                   const reference = verse.data.reference;
                   const verseID = verse.data.id;
-                  const content = verse.data.content.replace(/<\/?p[^>]*>|<\/?span[^>]*>/g, '').replace(/¶/g, '');
+                  const content = verse.data.content.replace(/<\/?p[^>]*>|<\/?ul[^>]*>/g, '').replace(/¶/g, '');
 
                   // Replace numbers with smaller numbers and add a space after each number
                   const formattedContent = content.replace(/\d+/g, match => `<small>${match}</small> `);
