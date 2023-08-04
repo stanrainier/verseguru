@@ -530,6 +530,7 @@
   justify-content: center;
   margin: 15px 40% 0px;
   font-size: 20px;
+  cursor: pointer;
   }  
   .speak-btn-chapter:hover{
     transition: 1s;

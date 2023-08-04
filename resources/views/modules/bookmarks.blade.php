@@ -159,11 +159,14 @@ function handleBookmarkResultClick(event) {
 // Get all the bookmark result elements
 var bookmarkResults = document.querySelectorAll('.bookmark-result');
 
+
 // Add click event listener to each bookmark result element
 bookmarkResults.forEach(result => {
   result.addEventListener('dblclick', handleBookmarkResultClick);
 });
 
+//tooltip
+bookmarkResults.setAttribute('title', 'Double-click to read the verse')
 
 const urlParams = new URLSearchParams(window.location.search);
 const searchQuery = urlParams.get('search');

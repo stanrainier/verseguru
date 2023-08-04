@@ -136,29 +136,6 @@ small {
   font-size: 30px !important;
   font-weight: bolder;
 }
-.tooltip {
-  position: relative;
-  display: inline-block;
-  border-bottom: 1px dotted black;
-}
-
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 120px;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-
-  /* Position the tooltip */
-  position: absolute;
-  z-index: 1;
-}
-
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-}
 .search-container-bible{
 
 }
@@ -185,7 +162,7 @@ small {
             <div class="input-group">
               <input type="text" name="query" id="searchInput" class="search-container-input" placeholder="Enter a word">
             </div>
-              <button class="speak-btn" onclick="startSpeechToText()"><i class="fas fa-microphone"></i></button>
+              <button class="speak-btn" id="speech-to-text-bible" onclick="startSpeechToText()"><i class="fas fa-microphone"></i></button>
             <div class="search__button">
               <button type="submit" class="search-container-btn">Search</button>
             </div>
@@ -421,6 +398,7 @@ function searchBible() {
               speakBtn.addEventListener('click', function () {
                 speakText(verseText);
               });
+              speakBtn.setAttribute('title', 'Read Aloud')
               verseItem.innerHTML = verse.reference + ' - ' + highlightedText;
               verseItem.appendChild(speakBtn);
 
@@ -446,6 +424,7 @@ function searchBible() {
               bookmarkBtn.addEventListener('click', function () {
                 toggleBookmark(verseText, verse, bookmarkBtn);
               });
+              bookmarkBtn.setAttribute('title', 'Bookmark Verse')
               verseItem.appendChild(bookmarkBtn);
 
               // Check if the current verse has cross-reference data
@@ -457,7 +436,7 @@ function searchBible() {
                 var crossRefIcon = document.createElement('i');
                 crossRefIcon.classList.add('fas', 'fa-book-open','crossrefIcon'); // Font Awesome's open book icon class
                 crossRefIcon.style.cursor = 'pointer';
-                crossRefIcon.setAttribute('title', 'Cross-Reference'); // Optional: Add a tooltip
+                crossRefIcon.setAttribute('title', 'Cross-Reference for the Verse'); // Optional: Add a tooltip
 
                 crossRefIcon.addEventListener('click', function () {
                   // Handle the cross-reference icon click event
@@ -474,6 +453,7 @@ function searchBible() {
               var twitterLink = createTwitterShareLink(verse.reference, verseText);
               var redditLink = createRedditShareLink(verse.reference, verseText); // Added Reddit share link
               shareIcons.innerHTML = twitterLink + redditLink;
+              shareIcons.setAttribute('title', 'Share verse');
               verseItem.appendChild(shareIcons);
 
               versesList.appendChild(verseItem);
@@ -753,6 +733,8 @@ function loadVerses(crossReferencePassedValue, crossReferencePassedValueReferenc
                     var crossRefIcon = document.createElement('i');
                     crossRefIcon.classList.add('fas', 'fa-book-open', 'crossrefIcon'); // Font Awesome's open book icon class
                     crossRefIcon.style.cursor = 'pointer';
+                    crossRefIcon.setAttribute('title', 'Cross-Reference'); // Add a tooltip
+
                     verseItem.appendChild(crossRefIcon);
 
                     crossRefIcon.addEventListener('click', function () {
@@ -763,6 +745,7 @@ function loadVerses(crossReferencePassedValue, crossReferencePassedValueReferenc
                       showCrossReferenceModal(verseIDfromAPI, verseReferenceIDs);
                     });
                   }
+
 
                   versesList.appendChild(verseItem);
                 });
@@ -802,8 +785,14 @@ function loadVerses(crossReferencePassedValue, crossReferencePassedValueReferenc
                 var speakBtn = document.createElement('div');
                 speakBtn.classList.add('speak-btn-chapter');
                 speakBtn.innerHTML = "<i class='fas fa-volume-up'></i>";
+
+                // Set tooltip for the speakBtn
+                speakBtn.setAttribute('title', 'Click to start text to speech and double click to stop');
+
                 speakBtn.addEventListener('click', function () {
                   speakText(chapterText);
+                });
+
                 speakBtn.addEventListener('dblclick', function () {
                   if (isSpeaking || isPaused) {
                     // If speaking or paused, stop the speech and reset flags
@@ -812,7 +801,7 @@ function loadVerses(crossReferencePassedValue, crossReferencePassedValueReferenc
                     isPaused = false;
                   }
                 });
-                });
+
 
                 // Append the speak button to the chapter heading
                 chapterHeading.appendChild(speakBtn);
@@ -957,6 +946,10 @@ function startSpeechToText() {
     };
   }
 }
+
+speechToTextIcon = document.getElementById('speech-to-text-bible');
+
+speechToTextIcon.setAttribute('title', 'Speech-to-text')
 
   </script>
 @endsection
