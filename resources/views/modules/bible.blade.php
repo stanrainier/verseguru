@@ -139,6 +139,13 @@ small {
 .search-container-bible{
 
 }
+.crossRefLink span{
+  font-size: 15px;
+  font-style: italic;
+}
+.modalVerseReference{
+  background: #f5e6ca !important;
+}
   </style>
 </head>
 
@@ -193,7 +200,7 @@ small {
     <div class="crossRefContent">
       <p id="crossrefTitle" class="cross-ref-title"></p>
       <div class="crossRefResults">
-        <p id="modalVerseReference"></p>
+        <p id="modalVerseReference" class="modalVerseReference"></p>
       </div>
     </div>
   </div>
@@ -249,20 +256,50 @@ function showCrossReferenceModal(verseID, verseReferenceIDs) {
   modalTitle.textContent = "Cross References for " + verseID;
 
   modalVerseReference.innerHTML = ''; // Clear the content before adding new items
+  
+  
+  // var versetest = verseReferenceIDs.dataset.verseReference;
+  // console.log("HEHEHEHHHEHE: ", versetest);
 
   // Loop through each verseReferenceID and create a new paragraph element for each one
   verseReferenceIDs.forEach(function (verseRefID) {
-    var verseRefParagraph = document.createElement('p');
-    verseRefParagraph.textContent = verseRefID;
+  var verseRefParagraph = document.createElement('p');
+  var verseRefContent = document.createElement('span');
+  var apiKey = 'fefe1d231e882b1423255e91e6d1cddf';
+  var apiUrl = `https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/verses/${verseRefID}`;
+  
+  fetch(apiUrl, {
+    headers: {
+      'api-key': apiKey
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    var verseIDfromBibleAPI = data.data.id;
+    var verseName = data.data.reference;
+    var verseContent = data.data.content;
+    
+    // Set the verse name as the text content of the verseRefParagraph
+    verseRefParagraph.textContent = verseName;
 
+    // Remove all <p> tags from the verseContent using a regular expression
+    verseContent = verseContent.replace(/<\/?p[^>]*>/g, '');
 
-    // Add a common class 'crossRefLink' to make the paragraph clickable
-    verseRefParagraph.classList.add('crossRefLink');
-    // Set the verse reference as a data attribute for later use
-    verseRefParagraph.dataset.verseReference = verseRefID;
+    // Set the verse content as HTML instead of text content
+    verseRefContent.innerHTML = verseContent;
 
-    modalVerseReference.appendChild(verseRefParagraph);
+    // Append the verseRefContent span under the verseRefParagraph
+    verseRefParagraph.appendChild(verseRefContent);
   });
+
+  // Add a common class 'crossRefLink' to make the paragraph clickable
+  verseRefParagraph.classList.add('crossRefLink');
+  // Set the verse reference as a data attribute for later use
+  verseRefParagraph.dataset.verseReference = verseRefID;
+
+  modalVerseReference.appendChild(verseRefParagraph);
+});
+
 
   modal.style.display = 'block';
 
@@ -357,7 +394,7 @@ function searchBible() {
     return;
   }
 
-  var apiKey = '0b638994917566feb258ea384320a0ea	'; // Replace with your actual API key
+  var apiKey = 'fefe1d231e882b1423255e91e6d1cddf	'; // Replace with your actual API key
   var bibleVersion = 'de4e12af7f28f599-01'; // Replace with the appropriate Bible version ID
 
   fetch(`https://api.scripture.api.bible/v1/bibles/${bibleVersion}/search?query=${searchWords.join(' ')}`, {
@@ -441,7 +478,7 @@ function searchBible() {
                 crossRefIcon.addEventListener('click', function () {
                   // Handle the cross-reference icon click event
                   var verseReferenceIDs = crossReferenceData.filter(item => item.verseID === verseID).map(item => item.VerseReferenceID);
-                  showCrossReferenceModal(verseReference, verseReferenceIDs);
+                  showCrossReferenceModal(verseReference, verseReferenceIDs, verseReference);
                   // showCrossReferenceModal(verseReference, verseReferenceIDs, verseText, verseReference);
                 });
 
@@ -606,7 +643,7 @@ function sendSearchQuery(searchQuery) {
     }
 
     function loadBooks() {
-      var apiKey = '0b638994917566feb258ea384320a0ea	';
+      var apiKey = 'fefe1d231e882b1423255e91e6d1cddf	';
       var apiUrl = 'https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/books';
       var bookSelect = document.getElementById('bookSelect');
       var paginationContainer = document.getElementById('paginationContainer');
@@ -633,7 +670,7 @@ function sendSearchQuery(searchQuery) {
 
     function loadChapters(crossReferencePassedValueBook) {
       var bookId = crossReferencePassedValueBook || document.getElementById('bookSelect').value;
-      var apiKey = '0b638994917566feb258ea384320a0ea	';
+      var apiKey = 'fefe1d231e882b1423255e91e6d1cddf	';
       var apiUrl = `https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/books/${bookId}/chapters`;
       var chapterSelect = document.getElementById('chapterSelect');
 
@@ -680,7 +717,7 @@ function loadVerses(crossReferencePassedValue, crossReferencePassedValueReferenc
 
 
   if (chapterId !== '') {
-    var apiKey = '0b638994917566feb258ea384320a0ea	';
+    var apiKey = 'fefe1d231e882b1423255e91e6d1cddf	';
     var apiUrl = `https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/chapters/${chapterId}/verses`;
     fetch(apiUrl, {
       headers: {
@@ -726,6 +763,7 @@ function loadVerses(crossReferencePassedValue, crossReferencePassedValueReferenc
                   chapterText += content + ' '; // Concatenate the verse text
 
                   var verseIDfromAPI = verse.data.id;
+                  var verseName = verse.data.reference;
                   var hasCrossReferenceData = crossReferenceData.some(item => item.verseID === verseIDfromAPI);
 
                   if (hasCrossReferenceData) {
@@ -741,8 +779,8 @@ function loadVerses(crossReferencePassedValue, crossReferencePassedValueReferenc
                       // Handle the cross-reference icon click event
                       var verseReferenceIDs = crossReferenceData
                         .filter(item => item.verseID === verseIDfromAPI)
-                        .map(item => item.VerseReferenceID);
-                      showCrossReferenceModal(verseIDfromAPI, verseReferenceIDs);
+                        .map(item => item.VerseReferenceID); 
+                      showCrossReferenceModal(verseName, verseReferenceIDs);
                     });
                   }
 
@@ -759,25 +797,36 @@ function loadVerses(crossReferencePassedValue, crossReferencePassedValueReferenc
                 }
 
                 // SCROLL TO VERSE 
-                if(!crossReferencePassedValueReference){
+                if (!crossReferencePassedValueReference) {
                   console.log("None");
                   console.log(crossReferencePassedValueReference);
-                }else{
-                  var elementsWithIdAttribute = document.querySelectorAll(`[data-id="${crossReferencePassedValueReference}"]`);
+                } else {
+                  var verseOutputContainer = document.querySelector(".verseOutput");
+                  if (!verseOutputContainer) {
+                    console.log("verseOutput container not found");
+                    return; // Abort scrolling if the container is not found.
+                  }
+
+                  var elementsWithIdAttribute = verseOutputContainer.querySelectorAll(
+                    `[data-id="${crossReferencePassedValueReference}"]`
+                  );
+
                   console.log("There is");
                   console.log("elementsWithIdAttribute:", elementsWithIdAttribute);
-                  elementsWithIdAttribute.forEach(element => {
+
+                  elementsWithIdAttribute.forEach((element) => {
                     element.classList.add("highlighted-verse");
                   });
-                  if (elementsWithIdAttribute.length > 0) {
-                  const elementToScroll = elementsWithIdAttribute[0];
-                  const rect = elementToScroll.getBoundingClientRect();
-                  const offsetTop = rect.top + window.pageYOffset;
-                  const middleOfScreen = offsetTop - window.innerHeight / 2;
-                  window.scrollTo({ top: middleOfScreen, behavior: "smooth" });
-                }
-                }
 
+                  if (elementsWithIdAttribute.length > 0) {
+                    const elementToScroll = elementsWithIdAttribute[0];
+                    const containerRect = verseOutputContainer.getBoundingClientRect();
+                    const elementRect = elementToScroll.getBoundingClientRect();
+                    const offsetTop = elementRect.top - containerRect.top;
+                    const middleOfContainer = offsetTop - verseOutputContainer.clientHeight / 2 + elementRect.height / 2;
+                    verseOutputContainer.scrollTo({ top: middleOfContainer, behavior: "smooth" });
+                  }
+                }
 
                 chapterHeading.textContent = chapterSelect.options[chapterSelect.selectedIndex].textContent;
 
