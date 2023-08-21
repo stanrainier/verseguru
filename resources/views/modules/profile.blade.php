@@ -4,9 +4,10 @@
 </style>
 @section('content')
     <div class="profile-main">
+        <div class="spacer-profile"></div>
         <div class="profile-container">
             <h1>Profile</h1>
-            <div class="profile-card">
+            <div class="profile-card animate__animated animate__fadeInDown">
                 <div class="profile-content">
                     <div class="profile-picture">
                         @if (auth()->user()->profile_picture)
@@ -72,4 +73,6 @@
             </div>
         </div>
     </div>
+    <div class="spacer"></div>
+
 @endsection

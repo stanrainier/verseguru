@@ -34,7 +34,10 @@
   display: none;
 }
 .modal-content {
-  background-color: #fefefe;
+  background: rgb(2,0,36);
+  background: -moz-linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(246,246,243,1) 0%, rgba(251,185,62,1) 100%);
+  background: -webkit-linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(246,246,243,1) 0%, rgba(251,185,62,1) 100%);
+  background: linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(246,246,243,1) 0%, rgba(251,185,62,1) 100%);
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
@@ -92,7 +95,10 @@
     background:none;
 }
 .toggleCrossReferenceBtn:hover{
-  background:orange;
+  background: rgb(255,147,15) !important;
+  background: -moz-linear-gradient(93deg, rgba(255,147,15,1) 0%, rgba(255,249,91,1) 100%) !important;
+  background: -webkit-linear-gradient(93deg, rgba(255,147,15,1) 0%, rgba(255,249,91,1) 100%) !important;
+  background: linear-gradient(93deg, rgba(255,147,15,1) 0%, rgba(255,249,91,1) 100%) !important;
   transition: 1s;
   color: white;
   border-color:#ff000000;
@@ -117,9 +123,16 @@ small {
   }
   .crossRefLink{
     cursor:pointer;
+    background: rgb(2,0,36)!important;
+    background: -moz-linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(246,246,243,1) 0%, rgba(237,231,8,1) 100%) !important;
+    background: -webkit-linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(246,246,243,1) 0%, rgba(237,231,8,1) 100%) !important;
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(246,246,243,1) 0%, rgba(237,231,8,1) 100%) !important; 
   }
   .crossRefLink:hover{
-    background: #ff9900c7;
+    background: rgb(246,246,243) !important;
+background: -moz-linear-gradient(93deg, rgba(246,246,243,1) 0%, rgba(255,198,5,1) 60%, rgba(250,255,195,1) 100%) !important;
+background: -webkit-linear-gradient(93deg, rgba(246,246,243,1) 0%, rgba(255,198,5,1) 60%, rgba(250,255,195,1) 100%) !important;
+background: linear-gradient(93deg, rgba(246,246,243,1) 0%, rgba(255,198,5,1) 60%, rgba(250,255,195,1) 100%) !important;
     transition: 1s;
     font-weight: bolder;
   }
@@ -144,15 +157,64 @@ small {
   font-style: italic;
 }
 .modalVerseReference{
-  background: #f5e6ca !important;
+  background: rgb(2,0,36);
+  background: -moz-linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(246,246,243,1) 0%, rgba(251,185,62,1) 100%);
+  background: -webkit-linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(246,246,243,1) 0%, rgba(251,185,62,1) 100%);
+  background: linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(246,246,243,1) 0%, rgba(251,185,62,1) 100%);
 }
+#loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+.loading-animation{
+    background: white;
+    padding: 5%;
+    border-radius: 50px;
+    flex-direction: column;
+    text-align: center;
+    margin: 0 25%;
+}
+.loading-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background-color: #333;
+  border-radius: 50%;
+  margin: 0 5px;
+  opacity: 0;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+   
   </style>
 </head>
 
 
 <div class="bible__container">
   <div class="spacer_bible"></div>
-  <div class="select-container">
+  <div class="select-container animate__animated animate__fadeInDown">
       <select id="bookSelect" onchange="loadChapters()">
         <option value="">Select Book</option>
       </select>
@@ -161,7 +223,7 @@ small {
       </select>
     <!-- <div class="select-section">
     </div> -->
-<div class="search-container-bible">
+<div class="search-container-bible ">
       <div class="bible-search-card">
         <form id="searchForm">
         @csrf
@@ -179,7 +241,7 @@ small {
       </div>
   </div>
  
-  <div class="output__container">
+  <div class="output__container animate__animated animate__fadeInUp">
     <div class="output-container">
     <div class="toggleCrossRef">
       <button id="toggleCrossReferenceBtn" class="toggleCrossReferenceBtn">Toggle Cross-Reference</button>
@@ -192,6 +254,23 @@ small {
       </div>
     </div>
   </div>
+  <div id="loading-screen">
+    <div class="loading-animation">
+      <h2>Please wait a moment</h2>
+      <div class="loading-dots">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+      </div>
+        <img src="/img/Eclipse-1s-200px.svg" alt="Loading animation" class="loader-icon">
+        <div>
+          <h2> Verse of the Day </h2>
+           <script src="http://www.verse-a-day.com/js/KJV.js"></script>
+        </div>
+
+    </div>
+  </div>
+
 <!-- The Modal -->
 <div id="crossRefModal" class="modal">
   <!-- Modal content -->
@@ -200,7 +279,7 @@ small {
     <div class="crossRefContent">
       <p id="crossrefTitle" class="cross-ref-title"></p>
       <div class="crossRefResults">
-        <p id="modalVerseReference" class="modalVerseReference"></p>
+        <div id="modalVerseReference" class="modalVerseReference"></p>
       </div>
     </div>
   </div>
@@ -265,7 +344,7 @@ function showCrossReferenceModal(verseID, verseReferenceIDs) {
   verseReferenceIDs.forEach(function (verseRefID) {
   var verseRefParagraph = document.createElement('p');
   var verseRefContent = document.createElement('span');
-  var apiKey = 'fefe1d231e882b1423255e91e6d1cddf';
+  var apiKey = 'ba3dd6aab618044bd1a336b08f408a5f';
   var apiUrl = `https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/verses/${verseRefID}`;
   
   fetch(apiUrl, {
@@ -389,12 +468,13 @@ function searchBible() {
   var chapterHeading = document.getElementById('chapterHeading');
 
   versesList.innerHTML = '';
+  showLoadingScreen();
 
   if (searchWords.length === 0) {
     return;
   }
 
-  var apiKey = 'fefe1d231e882b1423255e91e6d1cddf	'; // Replace with your actual API key
+  var apiKey = 'ba3dd6aab618044bd1a336b08f408a5f	'; // Replace with your actual API key
   var bibleVersion = 'de4e12af7f28f599-01'; // Replace with the appropriate Bible version ID
 
   fetch(`https://api.scripture.api.bible/v1/bibles/${bibleVersion}/search?query=${searchWords.join(' ')}`, {
@@ -483,6 +563,7 @@ function searchBible() {
                 });
 
                 verseItem.appendChild(crossRefIcon);
+                hideLoadingScreen();
                 
 
               var shareIcons = document.createElement('span');
@@ -643,7 +724,7 @@ function sendSearchQuery(searchQuery) {
     }
 
     function loadBooks() {
-      var apiKey = 'fefe1d231e882b1423255e91e6d1cddf	';
+      var apiKey = 'ba3dd6aab618044bd1a336b08f408a5f	';
       var apiUrl = 'https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/books';
       var bookSelect = document.getElementById('bookSelect');
       var paginationContainer = document.getElementById('paginationContainer');
@@ -670,7 +751,7 @@ function sendSearchQuery(searchQuery) {
 
     function loadChapters(crossReferencePassedValueBook) {
       var bookId = crossReferencePassedValueBook || document.getElementById('bookSelect').value;
-      var apiKey = 'fefe1d231e882b1423255e91e6d1cddf	';
+      var apiKey = 'ba3dd6aab618044bd1a336b08f408a5f	';
       var apiUrl = `https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/books/${bookId}/chapters`;
       var chapterSelect = document.getElementById('chapterSelect');
 
@@ -714,10 +795,9 @@ function loadVerses(crossReferencePassedValue, crossReferencePassedValueReferenc
   var chapterSelect = document.getElementById('chapterSelect');
   versesList.innerHTML = '';
 
-
-
+  showLoadingScreen();
   if (chapterId !== '') {
-    var apiKey = 'fefe1d231e882b1423255e91e6d1cddf	';
+    var apiKey = 'ba3dd6aab618044bd1a336b08f408a5f	';
     var apiUrl = `https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/chapters/${chapterId}/verses`;
     fetch(apiUrl, {
       headers: {
@@ -788,6 +868,7 @@ function loadVerses(crossReferencePassedValue, crossReferencePassedValueReferenc
                   versesList.appendChild(verseItem);
                 });
 
+                hideLoadingScreen();
 
                 // Display header of chapter
                 if (crossReferencePassedValue !== undefined) {
@@ -1000,5 +1081,12 @@ speechToTextIcon = document.getElementById('speech-to-text-bible');
 
 speechToTextIcon.setAttribute('title', 'Speech-to-text')
 
+function showLoadingScreen() {
+  document.getElementById('loading-screen').style.display = 'flex';
+}
+function hideLoadingScreen() {
+  document.getElementById('loading-screen').style.display = 'none';
+}
   </script>
+  
 @endsection

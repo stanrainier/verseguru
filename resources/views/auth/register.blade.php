@@ -5,12 +5,12 @@
 <main>
 <div class ="main__wrapper container">
             <div class="col">
-                <div class="home__header row ">
+                <div class="home__header row animate__animated animate__fadeInLeft">
                     <h1 class="welcomeText"> Welcome to <br>Verse Guru! </h1>
                 </div>
             </div>
             <div class="col">
-                <div class="signup__module row">
+                <div class="signup__module row animate__animated animate__fadeInRight">
                     <div class="card w-100 p-5 shadow-sm ">
                         <div class="row ">
                             <div class="card-body createAccount__container">

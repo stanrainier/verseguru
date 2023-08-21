@@ -21,11 +21,24 @@ class BookmarkController extends Controller
 
     public function deleteSingle($id)
     {
-        $searchHistory = Bookmark::findOrFail($id);
-        
-        $searchHistory->delete();
+        if (is_array($id)) {
+            // Delete multiple entries
+            foreach ($id as $entryId) {
+                $searchHistory = Bookmark::find($entryId);
     
-        return response()->json(['message' => 'Search history deleted']);
+                if ($searchHistory) {
+                    $searchHistory->delete();
+                }
+            }
+    
+            return response()->json(['message' => 'Search histories deleted']);
+        } else {
+            // Delete a single entry
+            $searchHistory = Bookmark::findOrFail($id);
+            $searchHistory->delete();
+    
+            return response()->json(['message' => 'Search history deleted']);
+        }
     }
     
 

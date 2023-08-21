@@ -44,15 +44,24 @@
 }
 .bookmark-result:hover{
     cursor:pointer;
-    background: #f1eaea;
-    transition: 1s;
+    background: rgb(246,246,243) !important;
+    background: -moz-linear-gradient(93deg, rgba(246,246,243,1) 0%, rgba(255,198,5,1) 60%, rgba(250,255,195,1) 100%) !important;
+    background: -webkit-linear-gradient(93deg, rgba(246,246,243,1) 0%, rgba(255,198,5,1) 60%, rgba(250,255,195,1) 100%) !important;
+    background: linear-gradient(93deg, rgba(246,246,243,1) 0%, rgba(255,198,5,1) 60%, rgba(250,255,195,1) 100%) !important;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#f6f6f3",endColorstr="#faffc3",GradientType=1);
+    transition: 1s !important;
+}
+.checkbox{
+    width:25px;
+    height:19px;
+    margin: 0 5px -4px 0;
 }
 </style>
 @section('content')
 
 <div class="bookmarks-main">
 <div class="spacer_bible"></div>
-    <div class="bookmarks-search-card">
+    <div class="bookmarks-search-card animate__animated animate__fadeInRight">
         <div class="bookmarks-search-body col d-flex align-items-center">
             <div class="input-group">
                 <input type="text" id="bookmarksSearch" class="form-control smart-search" placeholder="Search Bookmarks" aria-label="Recipient's username" aria-describedby="basic-addon2">
@@ -62,10 +71,13 @@
             </div>
         </div>
     </div>
-    <div class="bookmarks-container">
+    <div class="bookmarks-container animate__animated animate__fadeInUp">
         <div class="card bookmarkCard">
             <div>
                 <div class="bookmarks-delete-all-container">
+                    <button class="bookmarks-delete-all" id="delete-single">
+                        Delete Selected
+                    </button>
                     <button class="bookmarks-delete-all" onclick="deleteAllBookmarks()">
                         Delete All
                     </button>
@@ -80,13 +92,11 @@
                     <?php $sortedBookmarks = $bookmarks->sortByDesc('id'); ?>
                     @foreach ($sortedBookmarks as $bookmark)
                         <div class="bookmark-result">
-                            <span><strong>{{ $bookmark->verse }}</strong></span>
-                            <span >{{ $bookmark->verse_text }}</span>
-                            <button class="bookmark-delete-entry" onclick="deleteBookmark('{{ $bookmark->id }}')">
-                                <i class="fa-solid fa-x"></i>
-                            </button>
-                            <div>
-                            </div>
+                            <label class="bookmark-checkbox">
+                                <input type="checkbox" class="checkbox" value="{{ $bookmark->id }}">
+                                <span class="bookmark-verse"><strong>{{ $bookmark->verse }}</strong></span>
+                                <span class="bookmark-text">{{ $bookmark->verse_text }}</span>
+                            </label>
                         </div>
                     @endforeach
                 @endif
@@ -96,6 +106,85 @@
 </div>
 
 <script>
+
+
+// ... (previous JavaScript code) ...
+
+document.getElementById('delete-single').addEventListener('click', deleteSelectedBookmarks);
+
+function deleteSelectedBookmarks() {
+    var selectedIds = [];
+    var checkboxes = document.querySelectorAll('.checkbox:checked');
+    
+    checkboxes.forEach(checkbox => {
+        selectedIds.push(checkbox.value);
+    });
+
+    if (selectedIds.length === 0) {
+        Swal.fire(
+            'No Selection',
+            'Please select bookmarks to delete.',
+            'warning'
+        );
+        return;
+    }
+
+    Swal.fire({
+        title: 'Confirm Deletion',
+        text: 'Are you sure you want to delete selected bookmarks?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete them!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/bookmarks/delete/${selectedIds}`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ ids: selectedIds })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message);
+                // Remove the deleted bookmarks from the DOM
+                selectedIds.forEach(id => {
+                    var bookmarkResult = document.querySelector(`.bookmark-result[data-id="${id}"]`);
+                    if (bookmarkResult) {
+                        bookmarkResult.remove();
+                    }
+                });
+                Swal.fire({
+                title: 'Deleted!',
+                text: 'Selected bookmarks have been deleted.',
+                icon: 'success',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    location.reload();
+                }
+            });
+            })
+            .catch(error => {
+                console.error('Error deleting bookmarks:', error);
+                Swal.fire(
+                    'Error',
+                    'An error occurred while deleting bookmarks.',
+                    'error'
+                );
+            });
+        }
+    });
+}
+
+
+// ... (remaining JavaScript code) ...
+
+
+
+
 function deleteBookmark(id) {
     if (confirm('Are you sure you want to delete this bookmark?')) {
         fetch(`/bookmarks/delete/${id}`, {
@@ -118,26 +207,41 @@ function deleteBookmark(id) {
 }
 
     
-    function deleteAllBookmarks() {
-    if (confirm('Are you sure you want to delete all bookmarks?')) {
-        fetch('/bookmarks/delete-all', {
-            method: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data.message);
-            // Remove all bookmarks from the DOM
-            document.querySelectorAll('.bookmark-result').forEach(element => element.remove());
-            
-        })
-        .catch(error => {
-            console.error('Error deleting bookmarks:', error);
-        });
-    }
+function deleteAllBookmarks() {
+    Swal.fire({
+        title: 'Delete All Saved Bookmarks?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch('/bookmarks/delete-all', {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message);
+                // Remove all bookmarks from the DOM
+                document.querySelectorAll('.bookmark-result').forEach(element => element.remove());
+                Swal.fire(
+                    'Deleted!',
+                    'All bookmarks have been deleted.',
+                    'success'
+                );
+            })
+            .catch(error => {
+                console.error('Error deleting bookmarks:', error);
+            });
+        }
+    });
 }
+
 
 
 

@@ -41,7 +41,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="{{ asset('js/global.js') }}"></script>
-
+    <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   </head>
 
 <body>
@@ -104,7 +104,7 @@
                                         <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}" alt="{{ Auth::user()->name }}" class="pfp" >
                                         {{ Auth::user()->name }}
                                     </a>
-                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <div class="dropdown-menu dropdown-menu-end animate__animated animate__fadeInDown" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('profile') }}">{{ __('My Profile') }}</a>
                                     <a class="dropdown-item" href="/bookmarks">{{ __('Bookmarks') }}</a>
                                         <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
@@ -159,20 +159,20 @@
                     <div class="links col">
                         <h1>Links</h1>
                         <div class="links_contents mb-5">
-                            <div class="d-flex col justify-content-around">
+                            <div class="links__contents d-flex col justify-content-around">
                                 <div class="row">
-                                    <div class="row mt-4">
+                                    <div class="row links_link mt-4">
                                         <span><a href="/home">HOME</a></span>
                                     </div>
-                                    <div class="row mt-4">
+                                    <div class="row links_link mt-4">
                                         <span><a href="{{ route('bible') }}">BIBLE</a></span>
                                     </div>
                                 </div>
-                                <div class="row ">
+                                <div class="row links_link ">
                                     <div class="row mt-4">
                                         <span><a href="{{ route('aboutus') }}">ABOUT US</a></span>
                                     </div>
-                                    <div class="row mt-4">
+                                    <div class="row links_link mt-4">
                                         <span><a href="/bookmarks">BOOKMARKS</a></span>
                                     </div>
                                 </div>

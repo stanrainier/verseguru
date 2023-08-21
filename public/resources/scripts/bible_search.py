@@ -78,7 +78,7 @@ def get_relevant_verses(user_query, verses, relevance_threshold=0.1):
     return relevant_verses
 
 if __name__ == "__main__":
-    user_query = " ".join(sys.argv[1:])
+    user_query = " test ".join(sys.argv[1:])
 
 
     # Search with different variations of the user's query
