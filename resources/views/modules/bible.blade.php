@@ -496,6 +496,8 @@ function searchBible() {
         var noMatchMessage = document.createElement('div');
         noMatchMessage.textContent = 'No matching verses found.';
         versesList.appendChild(noMatchMessage);
+        hideLoadingScreen();
+        chapterHeading.textContent = "No Results for "+ "'"+searchWords+"'";
       } else {
         // Output | Result from search bible
         fetchCrossReferenceData() // Fetch cross-reference data
@@ -644,11 +646,12 @@ function sendSearchQuery(searchQuery) {
   const bookId = verse.bookId;
   const chapterId = verse.chapterId;
   const verseId = verse.id;
+  const reference = verse.reference;
   const bookmarkData = {
     verse_text: verseText,
     book_id: bookId,
     chapter: chapterId,
-    verse: verseId,
+    verse: reference,
   };
 
       console.log('Bookmark Data:', bookmarkData);
