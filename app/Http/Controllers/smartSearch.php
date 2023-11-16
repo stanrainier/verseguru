@@ -12,7 +12,7 @@ class smartSearch extends Controller
         $userQuery = $request->input('query');
 
         //where python
-        $pythonPath = "C:\\Users\\stanr\\AppData\\Local\\Programs\\Python\\Python310\\python.exe";
+        $pythonPath = "/usr/local/bin/python3";
         $scriptPath = public_path("resources/scripts/smart_search.py");
         $command = "$pythonPath $scriptPath \"$userQuery\"";
         $output = shell_exec($command);

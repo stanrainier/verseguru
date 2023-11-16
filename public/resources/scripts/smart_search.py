@@ -15,7 +15,7 @@ def load_bible_verses(csv_file):
 
 # Step 3: Generate embeddings and index (with caching)
 def generate_verse_embeddings(verses):
-    embeddings_cache_file = "C:\\Users\\stanr\\laravel\\VerseGuru\\public\\resources\\scripts\\embeddings_cache.pkl"
+    embeddings_cache_file = "/Users/stan/Documents/verseguru/public/resources/scripts/embeddings_cache.pkl"
     if os.path.exists(embeddings_cache_file):
         # Load embeddings from cache if available
         verse_embeddings = joblib.load(embeddings_cache_file)
@@ -42,7 +42,7 @@ def search_bible_verses(query, verses, verse_embeddings, top_k=5):
 # Example usage
 if __name__ == "__main__":
     # Assuming you have a CSV dataset with a column named 'Verse' containing Bible verses
-    csv_file = "public\\resources\\datasets\kjv.csv"
+    csv_file = "/Users/stan/Documents/verseguru/public/resources/datasets/kjv.csv"
     verses = load_bible_verses(csv_file)
     # 
     # Generate verse embeddings
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     print(f"Search Results for query: '{user_query}':")
     for i, verse_id in enumerate(verse_ids):
         verse_text = verses[verse_id]  # Retrieve the actual Bible verse from the list of verses
-        print(f"{i+1}. Similarity Score: {similarity_scores[i]}")
+        print(f"{i+1}. Similarity Score: {similarity_scores[i]:.2f}%")
         print(verse_text)
         print()
 

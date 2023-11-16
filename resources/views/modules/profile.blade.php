@@ -24,7 +24,7 @@
                         </form>
                     </div>
                     <div class="profile-right">
-                        <h2>My Information</h2>
+                        <h2>My Profile</h2>
                         <form method="POST" action="{{ route('profile.update') }}">
                             @csrf
                             @method('PUT')

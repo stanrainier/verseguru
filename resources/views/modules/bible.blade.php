@@ -231,7 +231,7 @@ background: linear-gradient(93deg, rgba(246,246,243,1) 0%, rgba(255,198,5,1) 60%
             <div class="input-group">
               <input type="text" name="query" id="searchInput" class="search-container-input" placeholder="Enter a word">
             </div>
-              <button class="speak-btn" id="speech-to-text-bible" onclick="startSpeechToText()"><i class="fas fa-microphone"></i></button>
+              <!-- <button class="speak-btn" id="speech-to-text-bible" onclick="startSpeechToText()"><i class="fas fa-microphone"></i></button> -->
             <div class="search__button">
               <button type="submit" class="search-container-btn">Search</button>
             </div>
@@ -924,6 +924,8 @@ function loadVerses(crossReferencePassedValue, crossReferencePassedValueReferenc
 
                 speakBtn.addEventListener('click', function () {
                   speakText(chapterText);
+                  console.log("chaptext",chapterText)
+                  console.log("content",content)
                 });
 
                 speakBtn.addEventListener('dblclick', function () {
@@ -1040,20 +1042,14 @@ let currentSpeech = null;
 
 function speakText(text) {
   if ('speechSynthesis' in window) {
-    if (isSpeaking || isPaused) {
-      window.speechSynthesis.cancel();
-      isSpeaking = false;
-      isPaused = false;
-    }
-
-    currentSpeech = new SpeechSynthesisUtterance();
-    currentSpeech.text = text;
+    window.speechSynthesis.cancel(); // Cancel any ongoing speech
+    var currentSpeech = new SpeechSynthesisUtterance(text);
     window.speechSynthesis.speak(currentSpeech);
-    isSpeaking = true;
   } else {
     console.log('Speech synthesis is not supported.');
   }
 }
+
 
 
 // Modify the startSpeechToText() function to include text-to-speech
@@ -1090,6 +1086,48 @@ function showLoadingScreen() {
 function hideLoadingScreen() {
   document.getElementById('loading-screen').style.display = 'none';
 }
+
+
+// highlight verse from bookmark
+function highlightVerse(verseContent) {
+    // Decode the encoded verseContent
+    verseContent = decodeURIComponent(verseContent);
+
+    var verseElements = document.querySelectorAll('ul');
+
+    verseElements.forEach(function (element) {
+        var currentVerse = element.textContent.trim();
+
+        // Check if the decoded verseContent matches the currentVerse
+        if (currentVerse.includes(verseContent)) {
+            element.classList.add("highlighted-verse");
+        }
+    });
+}
+
+    function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+
+  // Extract chapter and verse from the URL
+  var chapterContent = getParameterByName('chapter');
+  var verseContent = getParameterByName('verse');
+
+  // Check if both chapter and verse parameters are present
+  if (chapterContent && verseContent) {
+    // Call the loadChapter and highlightVerse functions with the extracted content
+    loadChapter(chapterContent);
+    highlightVerse(verseContent);
+  }
+    
   </script>
+
+
   
 @endsection

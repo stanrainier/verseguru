@@ -161,6 +161,18 @@ Route::post('/bookmarks/toggle', [BookmarkController::class, 'toggleBookmark'])-
 Route::post('/addBookmark', [BookmarkController::class, 'addBookmark'])->name('addBookmark');
 
 
+//NEW BOOKMARK AND HISTORY DELETE ROUTES
+Route::post('/bookmarks/delete-selected', [BookmarkController::class, 'deleteSelectedBookmarks'])
+    ->name('bookmarks.deleteSelected');
+
+Route::post('/search-history/delete-selected', [SearchHistoryController::class, 'deleteSelectedHistory'])
+    ->name('searchHistory.deleteSelected');
+    
+Route::post('/smartsearch-history/delete-selected', [SmartSearchHistoryController::class, 'deleteSelectedHistory'])
+    ->name('smartsearchHistory.deleteSelected');
+
+
+
 
 // Routes that require authentication
 Route::middleware('auth')->group(function () {

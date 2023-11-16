@@ -42,24 +42,23 @@ class SearchHistoryController extends Controller
         return view('modules.searchHistory', compact('searchHistory', 'smartsearchHistory'));
     }
 
-    public function deleteSingle($id)
+
+
+    public function deleteSelectedHistory(Request $request)
     {
-        $searchHistory = SearchHistory::find($id);
-        
-        if (!$searchHistory) {
-            return response()->json(['message' => 'Search history not found'], 404);
+        $selectedIds = $request->input('ids');
+    
+        if (!is_array($selectedIds) || count($selectedIds) === 0) {
+            return response()->json(['message' => 'No bookmarks selected.'], 400);
         }
-
-        $searchHistory->delete();
-
-        return response()->json(['message' => 'Search history deleted']);
+    
+        // Assuming that the 'ids' array contains bookmark IDs
+        // You can add additional validation and security checks here
+        
+        // Delete the selected bookmarks
+        searchHistory::whereIn('id', $selectedIds)->delete();
+    
+        return response()->json(['message' => 'Selected bookmarks have been deleted.']);
     }
 
-    public function deleteAll()
-    {
-        $userId = Auth::id();
-        SearchHistory::where('user_id', $userId)->delete();
-
-        return response()->json(['message' => 'All search history deleted']);
-    }
 }
