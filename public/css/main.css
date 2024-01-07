@@ -713,6 +713,31 @@ align-items: center;
   height:19px;
   margin: 0 5px -4px 0;
 }
+.bookmark-checkbox {
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s ease; /* Smooth transition effect for background-color */
+}
+
+.bookmark-checkbox:hover {
+  cursor: pointer;
+  background: rgb(246, 246, 243) !important;
+  background: -moz-linear-gradient(93deg, rgba(246, 246, 243, 1) 0%, rgba(255, 198, 5, 1) 60%, rgba(250, 255, 195, 1) 100%) !important;
+  background: -webkit-linear-gradient(93deg, rgba(246, 246, 243, 1) 0%, rgba(255, 198, 5, 1) 60%, rgba(250, 255, 195, 1) 100%) !important;
+  background: linear-gradient(93deg, rgba(246, 246, 243, 1) 0%, rgba(255, 198, 5, 1) 60%, rgba(250, 255, 195, 1) 100%) !important;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#f6f6f3", endColorstr="#faffc3", GradientType=1);
+}
+
+/* Add an animation for the checkbox itself */
+.checkbox {
+  width: 25px;
+  height: 19px;
+  margin: 0 5px -4px 0;
+  transition: transform 0.3s ease; /* Smooth transition for the checkbox */
+}
+.checkbox:checked {
+  transform: scale(1.2); /* Enlarge the checkbox when checked */
+}
 .search-history-main, .bookmarks-main {
     display: flex;
     align-items: center;
@@ -766,9 +791,16 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#f6f6f3",endCo
     height: 535px;
   }
   
-  .search-result span, .bookmark-result span {
+  .search-result span{
     font-size: 20px;
     text-align: center;
+    margin-right: 10px;
+  }
+
+  .bookmark-result span {
+    font-size: 15px;
+    text-align: center;
+    margin-right: 10px;
   }
   
   .search-result i, .bookmark-result i {

@@ -34,17 +34,15 @@ return [
     */
 
     'mailers' => [
-'smtp' => [
-    'transport' => 'smtp',
-    'url' => env('MAIL_URL'),
-    'host' => env('MAIL_HOST', 'sandbox.smtp.mailtrap.io'), // Update the host to Mailtrap
-    'port' => env('MAIL_PORT', 2525), // Update the port to Mailtrap
-    'encryption' => env('MAIL_ENCRYPTION', null), // Remove the default encryption value
-    'username' => env('MAIL_USERNAME'),
-    'password' => env('MAIL_PASSWORD'),
-    'timeout' => null,
-    'local_domain' => null, // Remove the default local_domain value
-],
+        'smtp' => [
+            'transport' => 'smtp',
+            'host' => 'smtp.gmail.com',
+            'port' => 587, // For TLS
+            'encryption' => 'tls',
+            'username' => 'stanrainiersalazar@gmail.com',
+            'password' => 'vchy bbfc iaeu ofxa',
+            'timeout' => null,
+        ],
 
         'ses' => [
             'transport' => 'ses',

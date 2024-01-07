@@ -70,7 +70,7 @@ if __name__ == "__main__":
     print(f"Search Results for query: '{user_query}':")
     for i, verse_id in enumerate(verse_ids):
         verse_text = verses[verse_id]  # Retrieve the actual Bible verse from the list of verses
-        print(f"{i+1}. Similarity Score: {similarity_scores[i]}")
+        print(f"{i+1}. Similarity Score: {similarity_scores[i]:.2f}")
         print(verse_text)
         print()
 

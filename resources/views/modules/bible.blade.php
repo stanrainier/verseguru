@@ -1047,7 +1047,7 @@ function speakText(text) {
     }
 
     currentSpeech = new SpeechSynthesisUtterance();
-    currentSpeech.text = text;
+    currentSpeech.innerHTML = text; // Use the provided HTML content
     window.speechSynthesis.speak(currentSpeech);
     isSpeaking = true;
   } else {
@@ -1060,19 +1060,16 @@ function speakText(text) {
 function startSpeechToText() {
   if (window.hasOwnProperty('webkitSpeechRecognition')) {
     var recognition = new webkitSpeechRecognition();
-
     recognition.continuous = false;
     recognition.interimResults = false;
     recognition.lang = 'en-US';
     recognition.start();
-
     recognition.onresult = function(event) {
       var transcript = event.results[0][0].transcript;
       document.getElementById('searchInput').value = transcript;
       speakText(transcript); // Speak the transcribed text
       recognition.stop();
     };
-
     recognition.onerror = function(event) {
       console.error('Speech recognition error:', event.error);
       recognition.stop();

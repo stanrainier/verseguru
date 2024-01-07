@@ -31,7 +31,7 @@
                             <form method="POST" action="{{ route('login') }}">
                                 @csrf
                                 <div class="row">
-                                    <h1> LOGIN </h1>
+                                    <h1> User Authentication </h1>
                                 </div>
                                 <div class="login__form d-flex row my-4">
                                     <div class="input-group mb-3">

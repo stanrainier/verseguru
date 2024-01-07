@@ -18,7 +18,22 @@ class BookmarkController extends Controller
         // Pass the bookmarks data to the 'bookmarks' view
         return view('/modules/bookmarks', compact('bookmarks'));
     }
-
+    public function deleteSelectedBookmarks(Request $request)
+    {
+        $selectedIds = $request->input('ids');
+    
+        if (!is_array($selectedIds) || count($selectedIds) === 0) {
+            return response()->json(['message' => 'No bookmarks selected.'], 400);
+        }
+    
+        // Assuming that the 'ids' array contains bookmark IDs
+        // You can add additional validation and security checks here
+        
+        // Delete the selected bookmarks
+        Bookmark::whereIn('id', $selectedIds)->delete();
+    
+        return response()->json(['message' => 'Selected bookmarks have been deleted.']);
+    }
     public function deleteSingle($id)
     {
         if (is_array($id)) {

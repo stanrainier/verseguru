@@ -25,6 +25,7 @@
 .bookmarkCard{
     padding: 25px;
 }
+
 .bookmarks-results{
     overflow-y: scroll;
     height: 535px;
@@ -56,6 +57,16 @@
     height:19px;
     margin: 0 5px -4px 0;
 }
+.select-all{
+    display:none;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: gray;
+    padding: 20px; 
+    margin: 10px;
+    justify-content: space-between;
+    background: #ed1a48;
+}
 </style>
 @section('content')
 
@@ -75,13 +86,16 @@
         <div class="card bookmarkCard">
             <div>
                 <div class="bookmarks-delete-all-container">
-                    <button class="bookmarks-delete-all" id="delete-single">
-                        Delete Selected
-                    </button>
-                    <button class="bookmarks-delete-all" onclick="deleteAllBookmarks()">
-                        Delete All
+                    <button class="bookmarks-delete-all" id="delete-button">
+                    <i class="fa-solid fa-trash"></i>
                     </button>
                 </div>
+            </div>
+            <div class="select-all" id="select-all">
+                <label class="bookmark-checkbox">
+                <input type="checkbox" class="checkbox" id="master-checkbox" style="margin-left 2px;"> <!-- Add a master checkbox -->
+                <span><strong>Select all</strong></span>
+                </label>
             </div>
             <div class="bookmarks-results">
                 @if ($bookmarks->isEmpty())
@@ -106,11 +120,30 @@
 </div>
 
 <script>
+    // Add an event listener to the master checkbox
+    $(document).ready(function() {
+    // Add a change event handler to the master checkbox
+    $('#master-checkbox').change(function() {
+        var isChecked = $(this).prop('checked');
+        $('.checkbox').prop('checked', isChecked);
+    });
+});
 
 
 // ... (previous JavaScript code) ...
+var selectDiv = document.getElementsByClassName('select-all')[0]; // Assuming there's only one element with the class 'select-all'
 
-document.getElementById('delete-single').addEventListener('click', deleteSelectedBookmarks);
+function toggleSelect() {
+    if (selectDiv.style.display === 'none') {
+        selectDiv.style.display = 'flex';
+    } else {
+        selectDiv.style.display = 'none';
+    }
+}
+
+document.getElementById('delete-button').addEventListener('mouseenter', toggleSelect);
+document.getElementById('delete-button').addEventListener('click', deleteSelectedBookmarks);
+
 
 function deleteSelectedBookmarks() {
     var selectedIds = [];
@@ -139,7 +172,7 @@ function deleteSelectedBookmarks() {
         confirmButtonText: 'Yes, delete them!'
     }).then((result) => {
         if (result.isConfirmed) {
-            fetch(`/bookmarks/delete/${selectedIds}`, {
+            fetch("{{ route('bookmarks.deleteSelected') }}", {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -158,14 +191,14 @@ function deleteSelectedBookmarks() {
                     }
                 });
                 Swal.fire({
-                title: 'Deleted!',
-                text: 'Selected bookmarks have been deleted.',
-                icon: 'success',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    location.reload();
-                }
-            });
+                    title: 'Deleted!',
+                    text: 'Selected bookmarks have been deleted.',
+                    icon: 'success',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.reload();
+                    }
+                });
             })
             .catch(error => {
                 console.error('Error deleting bookmarks:', error);
@@ -180,7 +213,7 @@ function deleteSelectedBookmarks() {
 }
 
 
-// ... (remaining JavaScript code) ...
+
 
 
 
@@ -206,41 +239,6 @@ function deleteBookmark(id) {
     }
 }
 
-    
-function deleteAllBookmarks() {
-    Swal.fire({
-        title: 'Delete All Saved Bookmarks?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            fetch('/bookmarks/delete-all', {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data.message);
-                // Remove all bookmarks from the DOM
-                document.querySelectorAll('.bookmark-result').forEach(element => element.remove());
-                Swal.fire(
-                    'Deleted!',
-                    'All bookmarks have been deleted.',
-                    'success'
-                );
-            })
-            .catch(error => {
-                console.error('Error deleting bookmarks:', error);
-            });
-        }
-    });
-}
 
 
 
@@ -254,11 +252,15 @@ function deleteAllBookmarks() {
 // }
 
 function handleBookmarkResultClick(event) {
-  var bookmarkContent = event.currentTarget.querySelector('strong').textContent;
+  var bookmarkContent = event.currentTarget.querySelector('.bookmark-verse').textContent;
   var parts = bookmarkContent.split('.');
   var extractedChapter = parts.slice(0, 2).join('.');
-  window.location.href = `/bible?chapter=${encodeURIComponent(bookmarkContent)}`;
+  //window.location.href = `/bible?chapter=${encodeURIComponent(bookmarkContent)}`;
+
+console.log("parts",parts)
+console.log("extractedChapter",extractedChapter)
 }
+
 
 // Get all the bookmark result elements
 var bookmarkResults = document.querySelectorAll('.bookmark-result');

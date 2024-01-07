@@ -17,7 +17,7 @@
                             <form method="POST" action="{{ route('register') }}">
                                 @csrf
                                 <div class="row">
-                                    <h1> SIGN UP </h1>
+                                    <h1> Register an Account </h1>
                                 </div>
                                 <div class="signup__form d-flex row ">
                                     <div class="input-group mb-3">
@@ -88,6 +88,20 @@
                 </div>
             </div>
         </div>
+</div>
 </main>
+<script>
+// Add a function to scroll to the signup__module on page load
+function scrollSignupModuleIntoView() {
+    const signupModule = document.querySelector(".signup__module");
+    
+    if (signupModule) {
+        signupModule.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+}
 
+// Add a DOMContentLoaded event listener to trigger the scroll when the page is loaded
+document.addEventListener("DOMContentLoaded", scrollSignupModuleIntoView);
+
+</script>
 @endsection
